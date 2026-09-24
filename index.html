@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estilo Hacker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #000;
+      color: #00ff00;
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Barra lateral */
+    .sidebar {
+      width: 200px;
+      background-color: #111;
+      border-right: 1px solid #00ff00;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab {
+      padding: 15px;
+      cursor: pointer;
+      border-bottom: 1px solid #00ff00;
+      transition: background 0.3s;
+    }
+
+    .tab:hover {
+      background-color: #222;
+    }
+
+    .tab.active {
+      background-color: #00ff00;
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* Contenido principal */
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="tab active" data-tab="inicio">Inicio</div>
+    <div class="tab" data-tab="terminal">Terminal</div>
+    <div class="tab" data-tab="config">Configuración</div>
+  </div>
+
+  <div class="content">
+    <div id="inicio" class="tab-content active">
+      <h1>Bienvenido al Sistema</h1>
+      <p>Estilo hacker activado. Fondo negro, texto verde y tipografía monoespaciada.</p>
+    </div>
+    <div id="terminal" class="tab-content">
+      <h1>Terminal</h1>
+      <p>Simulación de comandos:</p>
+      <pre>
+> ping servidor
+Respuesta: conexión establecida
+> ls
+Documentos  Descargas  Proyectos
+      </pre>
+    </div>
+    <div id="config" class="tab-content">
+      <h1>Configuración</h1>
+      <p>Aquí puedes ajustar parámetros del sistema.</p>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Quitar clase activa de todas las pestañas
+        tabs.forEach(t => t.classList.remove('active'));
+        // Ocultar todos los contenidos
+        contents.forEach(c => c.classList.remove('active'));
+
+        // Activar la pestaña seleccionada
+        tab.classList.add('active');
+        const target = document.getElementById(tab.dataset.tab);
+        target.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
