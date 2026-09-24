@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Estilo Hacker</title>
+  <title>Estudio Hacker</title>
   <style>
     body {
       margin: 0;
@@ -15,7 +15,7 @@
 
     /* Barra lateral */
     .sidebar {
-      width: 200px;
+      width: 220px;
       background-color: #111;
       border-right: 1px solid #00ff00;
       display: flex;
@@ -23,7 +23,7 @@
     }
 
     .tab {
-      padding: 15px;
+      padding: 12px;
       cursor: pointer;
       border-bottom: 1px solid #00ff00;
       transition: background 0.3s;
@@ -37,6 +37,19 @@
       background-color: #00ff00;
       color: #000;
       font-weight: bold;
+    }
+
+    /* Botón para agregar pestañas */
+    .add-tab {
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #222;
+      border-top: 1px solid #00ff00;
+    }
+
+    .add-tab:hover {
+      background-color: #333;
     }
 
     /* Contenido principal */
@@ -66,45 +79,74 @@
     <div class="tab active" data-tab="inicio">Inicio</div>
     <div class="tab" data-tab="terminal">Terminal</div>
     <div class="tab" data-tab="config">Configuración</div>
+    <div class="add-tab">+ Nueva pestaña</div>
   </div>
 
   <div class="content">
     <div id="inicio" class="tab-content active">
-      <h1>Bienvenido al Sistema</h1>
-      <p>Estilo hacker activado. Fondo negro, texto verde y tipografía monoespaciada.</p>
+      <h1>Panel de Estudio</h1>
+      <p>Organiza tus materias y proyectos aquí.</p>
     </div>
     <div id="terminal" class="tab-content">
       <h1>Terminal</h1>
-      <p>Simulación de comandos:</p>
       <pre>
 > ping servidor
 Respuesta: conexión establecida
 > ls
-Documentos  Descargas  Proyectos
+Matemáticas  Física  Historia
       </pre>
     </div>
     <div id="config" class="tab-content">
       <h1>Configuración</h1>
-      <p>Aquí puedes ajustar parámetros del sistema.</p>
+      <p>Ajusta parámetros del sistema.</p>
     </div>
   </div>
 
   <script>
+    const sidebar = document.querySelector('.sidebar');
     const tabs = document.querySelectorAll('.tab');
     const contents = document.querySelectorAll('.tab-content');
+    const addTabBtn = document.querySelector('.add-tab');
+    let tabCount = 0;
+
+    function activateTab(tab) {
+      // Quitar clase activa de todas las pestañas
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      // Activar la pestaña seleccionada
+      tab.classList.add('active');
+      const target = document.getElementById(tab.dataset.tab);
+      target.classList.add('active');
+    }
 
     tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        // Quitar clase activa de todas las pestañas
-        tabs.forEach(t => t.classList.remove('active'));
-        // Ocultar todos los contenidos
-        contents.forEach(c => c.classList.remove('active'));
+      tab.addEventListener('click', () => activateTab(tab));
+    });
 
-        // Activar la pestaña seleccionada
-        tab.classList.add('active');
-        const target = document.getElementById(tab.dataset.tab);
-        target.classList.add('active');
-      });
+    addTabBtn.addEventListener('click', () => {
+      tabCount++;
+      const newTabId = `tab${tabCount}`;
+      
+      // Crear pestaña en la barra lateral
+      const newTab = document.createElement('div');
+      newTab.classList.add('tab');
+      newTab.dataset.tab = newTabId;
+      newTab.textContent = `Materia ${tabCount}`;
+      sidebar.insertBefore(newTab, addTabBtn);
+
+      // Crear contenido asociado
+      const newContent = document.createElement('div');
+      newContent.id = newTabId;
+      newContent.classList.add('tab-content');
+      newContent.innerHTML = `<h1>Materia ${tabCount}</h1><p>Apuntes y ejercicios aquí...</p>`;
+      document.querySelector('.content').appendChild(newContent);
+
+      // Activar evento de clic
+      newTab.addEventListener('click', () => activateTab(newTab));
+
+      // Activar inmediatamente la nueva pestaña
+      activateTab(newTab);
     });
   </script>
 </body>
