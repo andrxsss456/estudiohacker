@@ -1,73 +1,1911 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  
-  <meta charset="UTF-8">
-  <title>Estudio Hacker</title>
-  <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Estudio Hacker v1.0</title>
+
+<style>
+
+:root{
+--main-color:#00ff00;
+--bg:#000;
+--panel:#111;
+--panel2:#1a1a1a;
+--danger:#ff3333;
+--warn:#ff9900;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:var(--bg);
+color:var(--main-color);
+font-family:Consolas,Courier New,monospace;
+overflow:hidden;
+}
+
+#clock{
+position:absolute;
+right:10px;
+top:10px;
+font-size:14px;
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+height:100vh;
+width:270px;
+background:var(--panel);
+border-right:1px solid var(--main-color);
+overflow-y:auto;
+}
+
+.logo{
+padding:20px;
+font-size:22px;
+text-align:center;
+border-bottom:1px solid var(--main-color);
+}
+
+.tab,
+.add-tab{
+padding:12px;
+cursor:pointer;
+border-bottom:1px solid #222;
+}
+
+.tab:hover,
+.add-tab:hover{
+background:var(--panel2);
+}
+
+.active-tab{
+background:#003300;
+}
+
+.content{
+margin-left:270px;
+height:100vh;
+overflow:auto;
+padding:20px;
+}
+
+.page{
+display:none;
+}
+
+.page.active{
+display:block;
+}
+
+input,
+textarea,
+button,
+select{
+
+background:#000;
+color:var(--main-color);
+
+border:1px solid var(--main-color);
+
+padding:8px;
+
+margin:5px 0;
+
+font-family:inherit;
+}
+
+button{
+cursor:pointer;
+}
+
+button:hover{
+background:#003300;
+}
+
+.card{
+
+background:#111;
+
+border:1px solid var(--main-color);
+
+padding:15px;
+
+margin:10px 0;
+
+}
+
+.dashboard-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(250px,1fr));
+
+gap:15px;
+
+}
+
+.stat-value{
+
+font-size:32px;
+
+margin-top:10px;
+
+}
+
+textarea{
+
+width:100%;
+
+min-height:250px;
+
+resize:vertical;
+
+}
+
+#terminalOutput{
+
+height:400px;
+
+overflow-y:auto;
+
+border:1px solid var(--main-color);
+
+padding:10px;
+
+white-space:pre-wrap;
+
+}
+
+.event-danger{
+color:red;
+font-weight:bold;
+}
+
+.event-normal{
+color:var(--main-color);
+}
+
+.help-section{
+margin-bottom:20px;
+}
+
+.help-section h3{
+margin-bottom:10px;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="sidebar">
-    <div class="tab active" data-tab="inicio">Inicio</div>
-    <div class="tab" data-tab="terminal">Terminal</div>
-    <div class="tab" data-tab="config">Configuración</div>
-    <div class="tab" data-tab="ayuda">Ayuda</div>
-    <div class="tab" data-tab="notas">Notas rápidas</div>
-    <div class="tab" data-tab="calendario">Calendario</div>
-    <div class="add-tab">+ Nueva pestaña</div>
-  </div>
 
-  <div class="content">
-    <div id="inicio" class="tab-content active">
-      <h1>Panel de Estudio</h1>
-      <p>Organiza tus materias y proyectos aquí.</p>
-    </div>
+<div id="clock"></div>
 
-    <div id="terminal" class="tab-content">
-      <h1>Terminal</h1>
-      <pre id="terminalOutput">Bienvenido a la Terminal Hacker\nEscribe "help" para ver comandos disponibles.\n</pre>
-      <input type="text" id="terminalInput" placeholder="Escribe un comando...">
-    </div>
+<div class="sidebar">
 
-    <div id="config" class="tab-content">
-      <h1>Configuración</h1>
-      <p>Opciones del sistema:</p>
-      <button onclick="exportarEventos('txt')">Exportar calendario en TXT</button>
-      <button onclick="exportarEventos('md')">Exportar calendario en Markdown</button>
-      <br><br>
-      <label for="importarArchivo">Importar archivo .txt:</label>
-      <input type="file" id="importarArchivo" accept=".txt">
-    </div>
+<div class="logo">
+ESTUDIO HACKER
+</div>
 
-    <div id="ayuda" class="tab-content">
-      <h1>Ayuda</h1>
-      <input type="text" id="buscadorAyuda" placeholder="Buscar en la ayuda...">
-      <ul id="listaAyuda">
-        <li data-keywords="crear pestaña new">Crear pestañas con “+ Nueva pestaña” o con el comando <code>new [nombre]</code> en la terminal.</li>
-        <li data-keywords="renombrar eliminar">Renombrar, eliminar y exportar apuntes desde cada pestaña.</li>
-        <li data-keywords="importar txt">Importar archivos .txt para convertirlos en pestañas.</li>
-        <li data-keywords="exportar txt md">Exportar todas las pestañas juntas en .txt o .md.</li>
-        <li data-keywords="ordenar prioridad">Ordenar automáticamente las pestañas por prioridad.</li>
-        <li data-keywords="terminal comandos">Comandos de terminal: <code>ls</code>, <code>ping servidor</code>, <code>clear</code>, <code>help</code>, <code>new [nombre]</code>.</li>
-        <li data-keywords="calendario eventos">Calendario: agregar, eliminar y exportar eventos.</li>
-      </ul>
-    </div>
+<div class="tab active-tab"
+data-tab="inicio">
+Inicio
+</div>
 
-    <div id="notas" class="tab-content">
-      <h1>Notas rápidas</h1>
-      <textarea id="notasRapidas"></textarea>
-    </div>
+<div class="tab"
+data-tab="dashboard">
+Dashboard
+</div>
 
-    <div id="calendario" class="tab-content">
-      <h1>Calendario</h1>
-      <input type="date" id="fechaEvento">
-      <input type="text" id="nombreEvento" placeholder="Nombre del evento">
-      <button id="agregarEvento">Agregar evento</button>
-      <ul id="listaEventos"></ul>
-    </div>
-  </div>
+<div class="tab"
+data-tab="terminal">
+Terminal
+</div>
 
-  <script src="script.js"></script>
+<div class="tab"
+data-tab="config">
+Configuración
+</div>
+
+<div class="tab"
+data-tab="ayuda">
+Ayuda
+</div>
+
+<div class="tab"
+data-tab="notas">
+Notas rápidas
+</div>
+
+<div class="tab"
+data-tab="calendario">
+Calendario
+</div>
+
+<div class="tab"
+data-tab="estadisticas">
+Estadísticas
+</div>
+
+<div id="materiasContainer"></div>
+
+<div class="add-tab">
++ Nueva Materia
+</div>
+
+</div>
+
+<div class="content">
+
+<!-- INICIO -->
+
+<div
+id="inicio"
+class="page active">
+
+<h1>Bienvenido</h1>
+
+<div class="card">
+
+<p>
+Centro de organización académica,
+apuntes,
+materias,
+eventos,
+estadísticas
+y productividad.
+</p>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div
+id="dashboard"
+class="page">
+
+<h1>Dashboard</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h3>Materias</h3>
+<div
+id="totalMaterias"
+class="stat-value">
+0
+</div>
+</div>
+
+<div class="card">
+<h3>Eventos</h3>
+<div
+id="totalEventos"
+class="stat-value">
+0
+</div>
+</div>
+
+<div class="card">
+<h3>Urgentes</h3>
+<div
+id="materiasUrgentes"
+class="stat-value">
+0
+</div>
+</div>
+
+<div class="card">
+<h3>Sesiones</h3>
+<div
+id="contadorSesiones"
+class="stat-value">
+0
+</div>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Próximo evento</h2>
+
+<div id="proximoEvento">
+Sin eventos
+</div>
+
+</div>
+
+</div>
+
+<!-- TERMINAL -->
+
+<div
+id="terminal"
+class="page">
+
+<h1>Terminal</h1>
+
+<div id="terminalOutput">
+
+Sistema iniciado.
+
+Escribe HELP.
+
+</div>
+
+<br>
+
+<input
+id="terminalInput"
+placeholder="Introduce comando">
+
+</div>
+
+<!-- CONFIGURACION -->
+
+<div
+id="config"
+class="page">
+
+<h1>Configuración</h1>
+
+<div class="card">
+
+<h3>Tema</h3>
+
+<input
+type="color"
+id="colorPrincipal"
+value="#00ff00">
+
+<button id="guardarTema">
+Guardar tema
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Exportaciones</h3>
+
+<button id="exportTXT">
+Exportar Todo TXT
+</button>
+
+<button id="exportMD">
+Exportar Todo MD
+</button>
+
+<button id="backupJSON">
+Backup JSON
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Restaurar Backup</h3>
+
+<input
+type="file"
+id="restoreJSON">
+
+</div>
+
+</div>
+<!-- AYUDA -->
+
+<div
+id="ayuda"
+class="page">
+
+<h1>Centro de Ayuda</h1>
+
+<input
+id="helpSearch"
+placeholder="Buscar ayuda...">
+
+<br><br>
+
+<div id="helpContent">
+
+<div class="help-section">
+
+<h3>Materias</h3>
+
+<p>
+Puedes crear materias desde:
+</p>
+
+<ul>
+<li>Botón + Nueva Materia</li>
+<li>Terminal usando NEW</li>
+</ul>
+
+</div>
+
+<div class="help-section">
+
+<h3>Prioridades</h3>
+
+<p>
+! = Alta Prioridad
+</p>
+
+<p>
+~ = Prioridad Media
+</p>
+
+<p>
+- = Prioridad Baja
+</p>
+
+</div>
+
+<div class="help-section">
+
+<h3>Exportaciones</h3>
+
+<p>
+Exportar TXT
+</p>
+
+<p>
+Exportar Markdown
+</p>
+
+<p>
+Backup JSON
+</p>
+
+</div>
+
+<div class="help-section">
+
+<h3>Calendario</h3>
+
+<p>
+Registrar exámenes.
+</p>
+
+<p>
+Registrar entregas.
+</p>
+
+<p>
+Eventos próximos se resaltan.
+</p>
+
+</div>
+
+<div class="help-section">
+
+<h3>Terminal</h3>
+
+<p>help</p>
+<p>ls</p>
+<p>new nombre</p>
+<p>clear</p>
+<p>ping servidor</p>
+<p>ordenar</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- NOTAS -->
+
+<div
+id="notas"
+class="page">
+
+<h1>Notas Rápidas</h1>
+
+<textarea
+id="quickNotes"
+placeholder="Escribe notas rápidas...">
+</textarea>
+
+</div>
+
+<!-- CALENDARIO -->
+
+<div
+id="calendario"
+class="page">
+
+<h1>Calendario</h1>
+
+<div class="card">
+
+<input
+type="date"
+id="eventDate">
+
+<br>
+
+<input
+id="eventName"
+placeholder="Nombre evento">
+
+<br>
+
+<button
+id="addEvent">
+Agregar Evento
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Eventos Registrados</h3>
+
+<ul id="eventList"></ul>
+
+</div>
+
+</div>
+
+<!-- ESTADISTICAS -->
+
+<div
+id="estadisticas"
+class="page">
+
+<h1>Estadísticas</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+
+<h3>Total Materias</h3>
+
+<div
+id="statsMaterias"
+class="stat-value">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Total Eventos</h3>
+
+<div
+id="statsEventos"
+class="stat-value">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Urgentes</h3>
+
+<div
+id="statsUrgentes"
+class="stat-value">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Horas Estudio</h3>
+
+<div
+id="statsHoras"
+class="stat-value">
+0
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="materiasPages"></div>
+
+</div>
+
+<script>
+
+/* ==========
+BASE DATOS
+========== */
+
+let materias =
+JSON.parse(
+localStorage.getItem(
+"materias"
+)
+) || [];
+
+let papelera =
+JSON.parse(
+localStorage.getItem(
+"papelera"
+)
+) || [];
+
+let eventos =
+JSON.parse(
+localStorage.getItem(
+"eventos"
+)
+) || [];
+
+/* ==========
+NAVEGACION
+========== */
+
+document
+.querySelectorAll(".tab")
+.forEach(tab=>{
+
+tab.onclick=()=>{
+
+document
+.querySelectorAll(".tab")
+.forEach(t=>{
+
+t.classList.remove(
+"active-tab"
+);
+
+});
+
+document
+.querySelectorAll(".page")
+.forEach(page=>{
+
+page.classList.remove(
+"active"
+);
+
+});
+
+tab.classList.add(
+"active-tab"
+);
+
+document
+.getElementById(
+tab.dataset.tab
+)
+.classList.add(
+"active"
+);
+
+};
+
+});
+
+/* ==========
+RELOJ
+========== */
+
+setInterval(()=>{
+
+const now =
+new Date();
+
+document
+.getElementById(
+"clock"
+)
+.innerText=
+now.toLocaleString();
+
+},1000);
+
+/* ==========
+SESIONES
+========== */
+
+let sesiones =
+parseInt(
+localStorage.getItem(
+"sesiones"
+)
+)||0;
+
+sesiones++;
+
+localStorage.setItem(
+"sesiones",
+sesiones
+);
+
+document
+.getElementById(
+"contadorSesiones"
+)
+.innerText=
+sesiones;
+
+/* ==========
+NOTAS RAPIDAS
+========== */
+
+const notes =
+document.getElementById(
+"quickNotes"
+);
+
+notes.value =
+localStorage.getItem(
+"quickNotes"
+) || "";
+
+notes.oninput=()=>{
+
+localStorage.setItem(
+"quickNotes",
+notes.value
+);
+
+};
+
+/* ==========
+AYUDA
+========== */
+
+document
+.getElementById(
+"helpSearch"
+)
+.addEventListener(
+"input",
+e=>{
+
+const texto=
+e.target.value
+.toLowerCase();
+
+document
+.querySelectorAll(
+"#helpContent .help-section"
+)
+.forEach(section=>{
+
+section.style.display=
+section.innerText
+.toLowerCase()
+.
+  /* =====================
+RENDER MATERIAS
+===================== */
+
+function renderMaterias(){
+
+const materiasContainer =
+document.getElementById(
+"materiasContainer"
+);
+
+const materiasPages =
+document.getElementById(
+"materiasPages"
+);
+
+materiasContainer.innerHTML="";
+materiasPages.innerHTML="";
+
+materias.sort(
+(a,b)=>b.prioridad-a.prioridad
+);
+
+materias.forEach(m=>{
+
+let simbolo="-";
+let color="#00ff00";
+
+if(m.prioridad>=4){
+simbolo="!";
+color="red";
+}
+else if(m.prioridad===3){
+simbolo="~";
+color="orange";
+}
+
+const tab=
+document.createElement("div");
+
+tab.className="tab";
+
+tab.dataset.tab=
+`materia_${m.id}`;
+
+tab.innerHTML=
+`${simbolo} ${m.nombre}`;
+
+tab.style.color=color;
+
+tab.onclick=()=>{
+
+document
+.querySelectorAll(".tab")
+.forEach(t=>t.classList.remove("active-tab"));
+
+document
+.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+tab.classList.add("active-tab");
+
+document
+.getElementById(
+`materia_${m.id}`
+)
+.classList.add("active");
+
+};
+
+materiasContainer.appendChild(tab);
+
+const page=
+document.createElement("div");
+
+page.id=
+`materia_${m.id}`;
+
+page.className=
+"page";
+
+page.innerHTML=`
+
+<h1>${m.nombre}</h1>
+
+<div class="card">
+
+<label>Título</label>
+
+<input
+id="titulo_${m.id}"
+value="${m.titulo}">
+
+<br>
+
+<label>Fecha</label>
+
+<input
+type="date"
+id="fecha_${m.id}"
+value="${m.fecha}">
+
+<br>
+
+<label>Prioridad</label>
+
+<input
+type="number"
+min="1"
+max="5"
+id="prioridad_${m.id}"
+value="${m.prioridad}">
+
+<br>
+
+<label>Horas Estudiadas</label>
+
+<input
+type="number"
+min="0"
+id="horas_${m.id}"
+value="${m.horas}">
+
+<br>
+
+<button onclick="guardarMateria(${m.id})">
+Guardar
+</button>
+
+<button onclick="renombrarMateria(${m.id})">
+Renombrar
+</button>
+
+<button onclick="eliminarMateria(${m.id})">
+Eliminar
+</button>
+
+</div>
+
+<div class="card">
+
+<textarea
+id="contenido_${m.id}">
+${m.contenido}
+</textarea>
+
+</div>
+
+<div class="card">
+
+<button onclick="exportarMateriaTXT(${m.id})">
+Exportar TXT
+</button>
+
+<button onclick="exportarMateriaMD(${m.id})">
+Exportar MD
+</button>
+
+</div>
+
+`;
+
+materiasPages.appendChild(page);
+
+});
+
+actualizarDashboard();
+actualizarEstadisticas();
+
+}
+
+/* =====================
+GUARDAR MATERIA
+===================== */
+
+function guardarMateria(id){
+
+const materia=
+materias.find(
+m=>m.id===id
+);
+
+materia.titulo=
+document.getElementById(
+`titulo_${id}`
+).value;
+
+materia.fecha=
+document.getElementById(
+`fecha_${id}`
+).value;
+
+materia.prioridad=
+parseInt(
+document.getElementById(
+`prioridad_${id}`
+).value
+)||1;
+
+materia.horas=
+parseInt(
+document.getElementById(
+`horas_${id}`
+).value
+)||0;
+
+materia.contenido=
+document.getElementById(
+`contenido_${id}`
+).value;
+
+guardarMaterias();
+renderMaterias();
+
+}
+
+/* =====================
+RENOMBRAR
+===================== */
+
+function renombrarMateria(id){
+
+const materia=
+materias.find(
+m=>m.id===id
+);
+
+const nuevo=
+prompt(
+"Nuevo nombre",
+materia.nombre
+);
+
+if(!nuevo) return;
+
+materia.nombre=nuevo;
+
+guardarMaterias();
+renderMaterias();
+
+}
+
+/* =====================
+ELIMINAR
+===================== */
+
+function eliminarMateria(id){
+
+if(
+!confirm(
+"¿Eliminar materia?"
+)
+)return;
+
+const materia=
+materias.find(
+m=>m.id===id
+);
+
+papelera.push(
+materia
+);
+
+localStorage.setItem(
+"papelera",
+JSON.stringify(
+papelera
+)
+);
+
+materias=
+materias.filter(
+m=>m.id!==id
+);
+
+guardarMaterias();
+renderMaterias();
+
+}
+
+/* =====================
+EXPORTAR MATERIA TXT
+===================== */
+
+function exportarMateriaTXT(id){
+
+const m=
+materias.find(
+x=>x.id===id
+);
+
+const blob=
+new Blob(
+[
+`MATERIA: ${m.nombre}
+
+TITULO: ${m.titulo}
+
+FECHA: ${m.fecha}
+
+PRIORIDAD: ${m.prioridad}
+
+APUNTES:
+
+${m.contenido}`
+]
+);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+`${m.nombre}.txt`;
+
+a.click();
+
+}
+
+/* =====================
+EXPORTAR MATERIA MD
+===================== */
+
+function exportarMateriaMD(id){
+
+const m=
+materias.find(
+x=>x.id===id
+);
+
+const blob=
+new Blob(
+[
+`# ${m.nombre}
+
+## ${m.titulo}
+
+Fecha: ${m.fecha}
+
+Prioridad: ${m.prioridad}
+
+${m.contenido}`
+]
+);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+`${m.nombre}.md`;
+
+a.click();
+
+}
+
+/* =====================
+DASHBOARD
+===================== */
+
+function actualizarDashboard(){
+
+document
+.getElementById(
+"totalMaterias"
+)
+.innerText=
+materias.length;
+
+document
+.getElementById(
+"totalEventos"
+)
+.innerText=
+eventos.length;
+
+const urgentes=
+materias.filter(
+m=>m.prioridad>=4
+).length;
+
+document
+.getElementById(
+"materiasUrgentes"
+)
+.innerText=
+urgentes;
+
+}
+
+/* =====================
+ESTADISTICAS
+===================== */
+
+function actualizarEstadisticas(){
+
+document
+.getElementById(
+"statsMaterias"
+)
+.innerText=
+materias.length;
+
+document
+.getElementById(
+"statsEventos"
+)
+.innerText=
+eventos.length;
+
+document
+.getElementById(
+"statsUrgentes"
+)
+.innerText=
+materias.filter(
+m=>m.prioridad>=4
+).length;
+
+let horas=0;
+
+materias.forEach(m=>{
+
+horas +=
+parseInt(m.horas)||0;
+
+});
+
+document
+.getElementById(
+"statsHoras"
+)
+.innerText=
+horas;
+
+}
+  /* =====================
+CALENDARIO
+===================== */
+
+function renderEventos(){
+
+const lista=
+document.getElementById(
+"eventList"
+);
+
+lista.innerHTML="";
+
+const hoy=
+new Date();
+
+eventos.forEach((evento,index)=>{
+
+const fecha=
+new Date(evento.fecha);
+
+const dias=
+Math.ceil(
+(fecha-hoy)/(1000*60*60*24)
+);
+
+const li=
+document.createElement("li");
+
+if(dias<=3 && dias>=0){
+li.className="event-danger";
+}else{
+li.className="event-normal";
+}
+
+li.innerHTML=
+`
+${evento.fecha}
+ | ${evento.nombre}
+ | faltan ${dias} días
+`;
+
+const btn=
+document.createElement("button");
+
+btn.innerText=
+"Eliminar";
+
+btn.onclick=()=>{
+
+if(
+!confirm(
+"¿Eliminar evento?"
+)
+)return;
+
+eventos.splice(
+index,
+1
+);
+
+localStorage.setItem(
+"eventos",
+JSON.stringify(
+eventos
+)
+);
+
+renderEventos();
+actualizarDashboard();
+actualizarEstadisticas();
+
+};
+
+li.appendChild(btn);
+
+lista.appendChild(li);
+
+});
+
+actualizarProximoEvento();
+
+}
+
+document
+.getElementById(
+"addEvent"
+)
+.onclick=()=>{
+
+const fecha=
+document.getElementById(
+"eventDate"
+).value;
+
+const nombre=
+document.getElementById(
+"eventName"
+).value;
+
+if(!fecha || !nombre){
+return;
+}
+
+eventos.push({
+fecha,
+nombre
+});
+
+localStorage.setItem(
+"eventos",
+JSON.stringify(
+eventos
+)
+);
+
+document.getElementById(
+"eventDate"
+).value="";
+
+document.getElementById(
+"eventName"
+).value="";
+
+renderEventos();
+
+};
+
+/* =====================
+PROXIMO EVENTO
+===================== */
+
+function actualizarProximoEvento(){
+
+if(eventos.length===0){
+
+document
+.getElementById(
+"proximoEvento"
+)
+.innerText=
+"Sin eventos";
+
+return;
+
+}
+
+const ordenados=
+[...eventos].sort(
+(a,b)=>
+new Date(a.fecha)
+-
+new Date(b.fecha)
+);
+
+document
+.getElementById(
+"proximoEvento"
+)
+.innerText=
+`${ordenados[0].fecha}
+ | ${ordenados[0].nombre}`;
+
+}
+
+/* =====================
+EXPORTACION GENERAL TXT
+===================== */
+
+function exportarTodoTXT(){
+
+let texto=
+"ESTUDIO HACKER\n\n";
+
+materias.forEach(m=>{
+
+texto +=
+`
+================================
+
+MATERIA:
+${m.nombre}
+
+TITULO:
+${m.titulo}
+
+FECHA:
+${m.fecha}
+
+PRIORIDAD:
+${m.prioridad}
+
+CONTENIDO:
+
+${m.contenido}
+
+`;
+
+});
+
+const blob=
+new Blob([texto]);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+"EstudioHacker.txt";
+
+a.click();
+
+}
+
+/* =====================
+EXPORTACION GENERAL MD
+===================== */
+
+function exportarTodoMD(){
+
+let md=
+"# Estudio Hacker\n\n";
+
+materias.forEach(m=>{
+
+md +=
+`
+# ${m.nombre}
+
+## ${m.titulo}
+
+Fecha:
+${m.fecha}
+
+Prioridad:
+${m.prioridad}
+
+${m.contenido}
+
+---
+
+`;
+
+});
+
+const blob=
+new Blob([md]);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+"EstudioHacker.md";
+
+a.click();
+
+}
+
+/* =====================
+EXPORTACION CALENDARIO
+===================== */
+
+function exportarCalendarioTXT(){
+
+let texto=
+"Calendario\n\n";
+
+eventos.forEach(e=>{
+
+texto +=
+`${e.fecha}
+ | ${e.nombre}\n`;
+
+});
+
+const blob=
+new Blob([texto]);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+"Calendario.txt";
+
+a.click();
+
+}
+
+function exportarCalendarioMD(){
+
+let texto=
+"# Calendario\n\n";
+
+eventos.forEach(e=>{
+
+texto +=
+`- ${e.fecha}
+ | ${e.nombre}\n`;
+
+});
+
+const blob=
+new Blob([texto]);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+"Calendario.md";
+
+a.click();
+
+}
+
+/* =====================
+BACKUP JSON
+===================== */
+
+document
+.getElementById(
+"backupJSON"
+)
+.onclick=()=>{
+
+const datos={
+
+materias,
+eventos,
+papelera,
+configuracion:{
+color:
+getComputedStyle(
+document.documentElement
+)
+.getPropertyValue(
+"--main-color"
+)
+}
+
+};
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+datos,
+null,
+2
+)
+]
+);
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+"EstudioHackerBackup.json";
+
+a.click();
+
+};
+
+/* =====================
+RESTAURAR JSON
+===================== */
+
+document
+.getElementById(
+"restoreJSON"
+)
+.addEventListener(
+"change",
+e=>{
+
+const archivo=
+e.target.files[0];
+
+if(!archivo){
+return;
+}
+
+const lector=
+new FileReader();
+
+lector.onload=
+ev=>{
+
+const datos=
+JSON.parse(
+ev.target.result
+);
+
+materias=
+datos.materias || [];
+
+eventos=
+datos.eventos || [];
+
+papelera=
+datos.papelera || [];
+
+localStorage.setItem(
+"materias",
+JSON.stringify(
+materias
+)
+);
+
+localStorage.setItem(
+"eventos",
+JSON.stringify(
+eventos
+)
+);
+
+localStorage.setItem(
+"papelera",
+JSON.stringify(
+papelera
+)
+);
+
+renderMaterias();
+renderEventos();
+
+};
+
+lector.readAsText(
+archivo
+);
+
+}
+);
+
+/* =====================
+CONFIGURACION
+===================== */
+
+document
+.getElementById(
+"guardarTema"
+)
+.onclick=()=>{
+
+const color=
+document.getElementById(
+"colorPrincipal"
+).value;
+
+document.documentElement
+.style.setProperty(
+"--main-color",
+color
+);
+
+localStorage.setItem(
+"temaColor",
+color
+);
+
+};
+
+const temaGuardado=
+localStorage.getItem(
+"temaColor"
+);
+
+if(temaGuardado){
+
+document.documentElement
+.style.setProperty(
+"--main-color",
+temaGuardado
+);
+
+}
+
+/* =====================
+TERMINAL
+===================== */
+
+const terminalOutput=
+document.getElementById(
+"terminalOutput"
+);
+
+const terminalInput=
+document.getElementById(
+"terminalInput"
+);
+
+function term(msg){
+
+terminalOutput.innerHTML +=
+"\n"+msg;
+
+terminalOutput.scrollTop=
+terminalOutput.scrollHeight;
+
+}
+
+terminalInput.addEventListener(
+"keydown",
+e=>{
+
+if(e.key!=="Enter")
+return;
+
+const cmd=
+terminalInput.value.trim();
+
+terminalInput.value="";
+
+term("> "+cmd);
+
+if(cmd==="help"){
+
+term(`
+help
+ls
+clear
+ping servidor
+new materia
+ordenar
+exportar txt
+exportar md
+`);
+
+}
+
+else if(cmd==="clear"){
+
+terminalOutput.innerHTML="";
+
+}
+
+else if(cmd==="ls"){
+
+materias.forEach(m=>{
+
+term(
+m.nombre
+);
+
+});
+
+}
+
+else if(cmd==="ping servidor"){
+
+term(
+"Conexión establecida"
+);
+
+}
+
+else if(
+cmd.startsWith(
+"new "
+)
+){
+
+const nombre=
+cmd.replace(
+"new ",
+""
+);
+
+crearMateria(
+nombre
+);
+
+term(
+"Materia creada"
+);
+
+}
+
+else if(
+cmd==="ordenar"
+){
+
+renderMaterias();
+
+term(
+"Materias ordenadas"
+);
+
+}
+
+else if(
+cmd==="exportar txt"
+){
+
+exportarTodoTXT();
+
+term(
+"Exportación TXT"
+);
+
+}
+
+else if(
+cmd==="exportar md"
+){
+
+exportarTodoMD();
+
+term(
+"Exportación MD"
+);
+
+}
+
+else{
+
+term(
+"Comando no reconocido"
+);
+
+}
+
+}
+);
+
+/* =====================
+BOTONES CONFIG
+===================== */
+
+document
+.getElementById(
+"exportTXT"
+)
+.onclick=
+exportarTodoTXT;
+
+document
+.getElementById(
+"exportMD"
+)
+.onclick=
+exportarTodoMD;
+
+/* =====================
+INICIO
+===================== */
+
+renderMaterias();
+
+renderEventos();
+
+actualizarDashboard();
+
+actualizarEstadisticas();
+
+</script>
+
 </body>
 </html>
-
