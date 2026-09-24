@@ -1,293 +1,81 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Estudio Hacker</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      height: 100vh;
-      overflow: hidden;
-
-      display: flex;
-
-      background: #000;
-      color: #00ff00;
-
       font-family: "Courier New", monospace;
+      background-color: #000;
+      color: #00ff00;
+      display: flex;
+      height: 100vh;
     }
-
-
-    /* =========================
-       SIDEBAR
-    ========================= */
 
     .sidebar {
       width: 260px;
       min-width: 260px;
-
-      background: #111;
-
+      background-color: #111;
       border-right: 1px solid #00ff00;
-
       display: flex;
       flex-direction: column;
-
       overflow-y: auto;
     }
-
 
     .tab {
       padding: 12px;
-
-      border-bottom: 1px solid #00ff00;
-
       cursor: pointer;
-
+      border-bottom: 1px solid #00ff00;
+      transition: background 0.2s;
       word-break: break-word;
-
-      transition:
-        background 0.2s,
-        color 0.2s;
     }
-
 
     .tab:hover {
-      background: #222;
+      background-color: #222;
     }
 
-
     .tab.active {
-      background: #00ff00;
-      color: #000;
-
+      background-color: #00ff00 !important;
+      color: #000 !important;
       font-weight: bold;
     }
 
-
     .add-tab {
-      margin-top: auto;
-
-      padding: 14px;
-
+      padding: 12px;
       text-align: center;
-
-      background: #222;
-
-      border-top: 1px solid #00ff00;
-
       cursor: pointer;
+      background-color: #222;
+      border-top: 1px solid #00ff00;
+      margin-top: auto;
     }
-
 
     .add-tab:hover {
-      background: #333;
+      background-color: #333;
     }
-
-
-    /* =========================
-       CONTENIDO
-    ========================= */
 
     .content {
       flex: 1;
-
-      padding: 25px;
-
+      padding: 20px;
       overflow-y: auto;
     }
 
-
     .tab-content {
       display: none;
-
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.3s;
     }
-
 
     .tab-content.active {
       display: block;
     }
 
-
-    h1 {
-      margin-top: 0;
-    }
-
-
-    /* =========================
-       TERMINAL
-    ========================= */
-
-    .terminal {
-      padding: 15px;
-
-      min-height: 200px;
-
-      background: #050505;
-
-      border: 1px solid #00ff00;
-
-      white-space: pre-wrap;
-    }
-
-
-    /* =========================
-       FORMULARIO
-    ========================= */
-
-    .field {
-      margin-bottom: 18px;
-    }
-
-
-    .field label {
-      display: block;
-
-      margin-bottom: 7px;
-    }
-
-
-    .field input,
-    .field select,
-    .notes {
-      width: 100%;
-
-      padding: 10px;
-
-      background: #000;
-
-      color: #00ff00;
-
-      border: 1px solid #00ff00;
-
-      outline: none;
-
-      font-family: inherit;
-    }
-
-
-    .field input:focus,
-    .field select:focus,
-    .notes:focus {
-      box-shadow: 0 0 8px #00ff00;
-    }
-
-
-    .notes {
-      min-height: 350px;
-
-      resize: vertical;
-
-      line-height: 1.5;
-    }
-
-
-    /* =========================
-       BOTONES
-    ========================= */
-
-    .buttons {
-      display: flex;
-
-      flex-wrap: wrap;
-
-      gap: 10px;
-
-      margin-top: 15px;
-    }
-
-
-    button {
-      padding: 10px 14px;
-
-      background: #222;
-
-      color: #00ff00;
-
-      border: 1px solid #00ff00;
-
-      font-family: inherit;
-
-      cursor: pointer;
-    }
-
-
-    button:hover {
-      background: #333;
-    }
-
-
-    .delete-btn {
-      color: #ff4444;
-
-      border-color: #ff4444;
-    }
-
-
-    .delete-btn:hover {
-      background: #440000;
-    }
-
-
-    .primary-btn {
-      background: #00ff00;
-
-      color: #000;
-
-      font-weight: bold;
-    }
-
-
-    .primary-btn:hover {
-      background: #66ff66;
-    }
-
-
-    /* =========================
-       CONFIGURACIÓN
-    ========================= */
-
-    .config-box {
-      max-width: 600px;
-
-      padding: 20px;
-
-      background: #050505;
-
-      border: 1px solid #00ff00;
-    }
-
-
-    .status {
-      margin-top: 10px;
-
-      opacity: 0;
-
-      transition: opacity 0.3s;
-    }
-
-
-    .status.show {
-      opacity: 1;
-    }
-
-
-    /* =========================
-       ANIMACIÓN
-    ========================= */
-
     @keyframes fadeIn {
-
       from {
         opacity: 0;
       }
@@ -295,2015 +83,1604 @@
       to {
         opacity: 1;
       }
-
     }
 
-
-    /* =========================
-       MÓVIL
-    ========================= */
-
-    @media (max-width: 700px) {
-
-      body {
-        flex-direction: column;
-      }
-
-
-      .sidebar {
-        width: 100%;
-        min-width: 100%;
-
-        max-height: 230px;
-
-        border-right: none;
-        border-bottom: 1px solid #00ff00;
-      }
-
-
-      .add-tab {
-        margin-top: 0;
-      }
-
-
-      .content {
-        padding: 15px;
-      }
-
+    input,
+    textarea,
+    select {
+      background-color: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-family: "Courier New", monospace;
+      padding: 8px;
+      margin: 5px 0;
     }
 
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 250px;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #222;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 8px 12px;
+      margin: 5px 5px 5px 0;
+      cursor: pointer;
+      font-family: "Courier New", monospace;
+    }
+
+    button:hover {
+      background-color: #00ff00;
+      color: #000;
+    }
+
+    .danger:hover {
+      background-color: red;
+      color: white;
+      border-color: red;
+    }
+
+    .info {
+      border: 1px solid #00ff00;
+      padding: 12px;
+      margin: 10px 0;
+    }
+
+    .estado {
+      margin-top: 10px;
+      color: #00ff00;
+    }
   </style>
-
 </head>
-
 
 <body>
 
-
-  <!-- ==================================
+  <!-- =========================
        BARRA LATERAL
-  =================================== -->
+  ========================== -->
+  <div class="sidebar">
 
-  <aside class="sidebar" id="sidebar">
-
-    <div
-      class="tab active"
-      data-tab="inicio"
-    >
+    <div class="tab active" data-tab="inicio">
       Inicio
     </div>
 
-
-    <div
-      class="tab"
-      data-tab="terminal"
-    >
+    <div class="tab" data-tab="terminal">
       Terminal
     </div>
 
-
-    <div
-      class="tab"
-      data-tab="config"
-    >
+    <div class="tab" data-tab="config">
       Configuración
     </div>
 
+    <div class="tab" data-tab="ayuda">
+      Ayuda
+    </div>
 
-    <div
-      class="add-tab"
-      id="addTab"
-    >
+    <div class="add-tab">
       + Nueva pestaña
     </div>
 
-  </aside>
+  </div>
 
 
-
-  <!-- ==================================
+  <!-- =========================
        CONTENIDO
-  =================================== -->
+  ========================== -->
+  <div class="content">
 
-  <main class="content" id="content">
+    <!-- INICIO -->
+    <div id="inicio" class="tab-content active">
 
-
-    <!-- ==================================
-         INICIO
-    =================================== -->
-
-    <section
-      id="inicio"
-      class="tab-content active"
-    >
-
-      <h1>
-        Panel de Estudio
-      </h1>
+      <h1>Panel de Estudio</h1>
 
       <p>
-        Bienvenido a Estudio Hacker.
+        Organiza tus materias, proyectos y apuntes.
       </p>
 
-      <p>
-        Crea pestañas para organizar
-        tus materias, proyectos y apuntes.
-      </p>
+      <div class="info">
+        <p>> Sistema iniciado...</p>
+        <p>> Estado: ONLINE</p>
+        <p>> Estudio Hacker listo.</p>
+      </div>
 
-      <p>
-        &gt; Sistema iniciado correctamente...
-      </p>
-
-    </section>
+    </div>
 
 
+    <!-- TERMINAL -->
+    <div id="terminal" class="tab-content">
 
-    <!-- ==================================
-         TERMINAL
-    =================================== -->
+      <h1>Terminal</h1>
 
-    <section
-      id="terminal"
-      class="tab-content"
-    >
-
-      <h1>
-        Terminal
-      </h1>
-
-
-      <div class="terminal">
-
-&gt; ping servidor
+      <pre>
+> ping servidor
 
 Respuesta: conexión establecida
 
-&gt; ls
+> ls
 
 Matemáticas
 Física
 Historia
 
-&gt; status
+> status
 
-Sistema: ONLINE
-Almacenamiento: localStorage
+Sistema funcionando correctamente.
+      </pre>
 
-      </div>
+    </div>
 
-    </section>
 
+    <!-- CONFIGURACIÓN -->
+    <div id="config" class="tab-content">
 
+      <h1>Configuración</h1>
 
-    <!-- ==================================
-         CONFIGURACIÓN
-    =================================== -->
+      <p>Ajusta parámetros del sistema:</p>
 
-    <section
-      id="config"
-      class="tab-content"
-    >
+      <label>
+        Color del texto:
+      </label>
 
-      <h1>
-        Configuración
-      </h1>
+      <input
+        type="color"
+        id="colorTexto"
+        value="#00ff00"
+      >
 
+      <br>
 
-      <div class="config-box">
+      <label>
+        Tamaño de fuente:
+      </label>
 
+      <input
+        type="number"
+        id="tamanoFuente"
+        value="16"
+        min="10"
+        max="40"
+      >
 
-        <!-- COLOR -->
+      <br>
 
-        <div class="field">
+      <label>
+        Tipografía:
+      </label>
 
-          <label for="colorTexto">
-            Color del texto:
-          </label>
+      <select id="tipografia">
 
-          <input
-            type="color"
-            id="colorTexto"
-            value="#00ff00"
-          >
+        <option value="'Courier New', monospace">
+          Courier New
+        </option>
 
-        </div>
+        <option value="Consolas, monospace">
+          Consolas
+        </option>
 
+        <option value="Monaco, monospace">
+          Monaco
+        </option>
 
-        <!-- TAMAÑO -->
+      </select>
 
-        <div class="field">
+      <br>
 
-          <label for="tamanoFuente">
-            Tamaño de fuente:
-          </label>
+      <button id="aplicarConfig">
+        Aplicar configuración
+      </button>
 
-          <input
-            type="number"
-            id="tamanoFuente"
-            value="16"
-            min="10"
-            max="40"
-          >
+      <hr>
 
-        </div>
+      <h2>Exportación</h2>
 
+      <button id="exportarTodo">
+        Exportar todas las pestañas (.txt)
+      </button>
 
-        <!-- TIPOGRAFÍA -->
+      <button id="exportarMarkdown">
+        Exportar todas las pestañas (.md)
+      </button>
 
-        <div class="field">
+      <h2>Importación</h2>
 
-          <label for="tipografia">
-            Tipografía:
-          </label>
+      <label for="importarArchivo">
+        Importar archivo .txt:
+      </label>
 
-          <select id="tipografia">
+      <input
+        type="file"
+        id="importarArchivo"
+        accept=".txt"
+      >
 
-            <option value="'Courier New', monospace">
-              Courier New
-            </option>
+      <p id="estadoConfig" class="estado"></p>
 
-            <option value="Consolas, monospace">
-              Consolas
-            </option>
+    </div>
 
-            <option value="Monaco, monospace">
-              Monaco
-            </option>
 
-          </select>
+    <!-- AYUDA -->
+    <div id="ayuda" class="tab-content">
 
-        </div>
+      <h1>Ayuda</h1>
 
+      <p>
+        Bienvenido al sistema Estudio Hacker.
+      </p>
 
-        <!-- APLICAR -->
+      <ul>
 
-        <button
-          id="aplicarConfig"
-          class="primary-btn"
-        >
-          Aplicar cambios
-        </button>
+        <li>
+          Crear nuevas pestañas con
+          "+ Nueva pestaña".
+        </li>
 
+        <li>
+          Escribir apuntes y guardarlos automáticamente.
+        </li>
 
-        <div
-          id="configStatus"
-          class="status"
-        >
-          ✓ Configuración guardada
-        </div>
+        <li>
+          Establecer título, fecha y prioridad.
+        </li>
 
+        <li>
+          Renombrar pestañas.
+        </li>
 
-        <hr
-          style="
-            border-color:#00ff00;
-            margin:25px 0;
-          "
-        >
+        <li>
+          Eliminar pestañas.
+        </li>
 
+        <li>
+          Exportar apuntes individuales.
+        </li>
 
-        <!-- ==================================
-             EXPORTACIÓN
-        =================================== -->
+        <li>
+          Exportar todos los apuntes en TXT.
+        </li>
 
-        <h2>
-          Exportar
-        </h2>
+        <li>
+          Exportar todos los apuntes en Markdown.
+        </li>
 
+        <li>
+          Importar archivos TXT.
+        </li>
 
-        <button
-          id="exportarTodo"
-        >
-          Exportar todas las pestañas (.txt)
-        </button>
+        <li>
+          Ordenar automáticamente por prioridad.
+        </li>
 
+      </ul>
 
-        <br><br>
+      <h3>Prioridades</h3>
 
+      <pre>
+!  = Prioridad alta  (4-5)
+~  = Prioridad media (3)
+-  = Prioridad baja  (1-2)
+#  = Sin prioridad
+      </pre>
 
-        <button
-          id="exportarMarkdown"
-        >
-          Exportar todas las pestañas (.md)
-        </button>
+      <h3>Ejemplo</h3>
 
+      <pre>
+> crear pestaña Matemáticas
 
-        <hr
-          style="
-            border-color:#00ff00;
-            margin:25px 0;
-          "
-        >
+> establecer prioridad 5
 
+> escribir apuntes
 
-        <!-- ==================================
-             IMPORTACIÓN
-        =================================== -->
+> exportar Markdown
+      </pre>
 
-        <h2>
-          Importar
-        </h2>
+    </div>
 
+  </div>
 
-        <label for="importarArchivo">
-          Importar archivo .txt:
-        </label>
 
-
-        <br><br>
-
-
-        <input
-          type="file"
-          id="importarArchivo"
-          accept=".txt"
-        >
-
-
-        <div
-          id="importStatus"
-          class="status"
-        ></div>
-
-
-        <hr
-          style="
-            border-color:#00ff00;
-            margin:25px 0;
-          "
-        >
-
-
-        <!-- ==================================
-             GITHUB
-        =================================== -->
-
-        <h2>
-          Sincronización
-        </h2>
-
-
-        <p>
-          La sincronización con GitHub requiere
-          autenticación segura desde un servidor.
-        </p>
-
-
-        <button
-          id="githubInfo"
-        >
-          Información de GitHub
-        </button>
-
-
-      </div>
-
-    </section>
-
-
-  </main>
-
-
-
-  <!-- ==================================
-       JAVASCRIPT
-  =================================== -->
-
+  <!-- =========================
+       JAVASCRIPT PRINCIPAL
+  ========================== -->
   <script>
 
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => {
+    const sidebar = document.querySelector(".sidebar");
+    const addTabBtn = document.querySelector(".add-tab");
+    const contentContainer = document.querySelector(".content");
 
 
-        /* ==================================
-           ELEMENTOS
-        =================================== */
+    /*
+     * ==========================================
+     * UTILIDADES
+     * ==========================================
+     */
 
-        const sidebar =
-          document.getElementById("sidebar");
+    function obtenerDatosTab(tabId) {
 
-        const content =
-          document.getElementById("content");
+      return {
+        nombre:
+          localStorage.getItem(tabId + "_nombre") || "Sin nombre",
 
-        const addTabBtn =
-          document.getElementById("addTab");
+        titulo:
+          localStorage.getItem(tabId + "_titulo") || "",
 
+        fecha:
+          localStorage.getItem(tabId + "_fecha") || "",
 
-        /* ==================================
-           CONFIGURACIÓN
-        =================================== */
+        prioridad:
+          localStorage.getItem(tabId + "_prioridad") || "",
 
-        const colorTexto =
-          document.getElementById("colorTexto");
+        contenido:
+          localStorage.getItem(tabId + "_contenido") || ""
+      };
 
-        const tamanoFuente =
-          document.getElementById("tamanoFuente");
+    }
 
-        const tipografia =
-          document.getElementById("tipografia");
 
-        const aplicarConfig =
-          document.getElementById("aplicarConfig");
+    function guardarDatosTab(tabId, datos) {
 
-        const configStatus =
-          document.getElementById("configStatus");
+      localStorage.setItem(
+        tabId + "_nombre",
+        datos.nombre
+      );
 
+      localStorage.setItem(
+        tabId + "_titulo",
+        datos.titulo
+      );
 
-        /* ==================================
-           CAMBIAR PESTAÑA
-        =================================== */
+      localStorage.setItem(
+        tabId + "_fecha",
+        datos.fecha
+      );
 
-        function activateTab(tab) {
+      localStorage.setItem(
+        tabId + "_prioridad",
+        datos.prioridad
+      );
 
-          document
-            .querySelectorAll(".tab")
-            .forEach(t => {
+      localStorage.setItem(
+        tabId + "_contenido",
+        datos.contenido
+      );
 
-              t.classList.remove(
-                "active"
-              );
+    }
 
-            });
 
+    /*
+     * ==========================================
+     * ACTIVAR PESTAÑA
+     * ==========================================
+     */
 
-          document
-            .querySelectorAll(".tab-content")
-            .forEach(c => {
+    function activateTab(tab) {
 
-              c.classList.remove(
-                "active"
-              );
+      document
+        .querySelectorAll(".tab")
+        .forEach(t => t.classList.remove("active"));
 
-            });
+      document
+        .querySelectorAll(".tab-content")
+        .forEach(c => c.classList.remove("active"));
 
+      tab.classList.add("active");
 
-          tab.classList.add(
-            "active"
-          );
+      const target =
+        document.getElementById(tab.dataset.tab);
 
+      if (target) {
+        target.classList.add("active");
+      }
 
-          const target =
-            document.getElementById(
-              tab.dataset.tab
-            );
+    }
 
 
-          if (target) {
+    /*
+     * ==========================================
+     * PRIORIDAD
+     * ==========================================
+     */
 
-            target.classList.add(
-              "active"
-            );
+    function obtenerEstiloPrioridad(prioridad) {
 
-          }
+      prioridad = parseInt(prioridad) || 0;
 
-        }
+      if (prioridad >= 4) {
 
+        return {
+          simbolo: "!",
+          color: "red"
+        };
 
+      }
 
-        function configurarTab(tab) {
+      if (prioridad === 3) {
 
-          tab.addEventListener(
-            "click",
-            () => {
+        return {
+          simbolo: "~",
+          color: "orange"
+        };
 
-              activateTab(tab);
+      }
 
-            }
-          );
+      if (prioridad > 0) {
 
-        }
+        return {
+          simbolo: "-",
+          color: "green"
+        };
 
+      }
 
-        document
-          .querySelectorAll(".tab")
-          .forEach(configurarTab);
+      return {
+        simbolo: "#",
+        color: "#00ff00"
+      };
 
+    }
 
 
-        /* ==================================
-           CONFIGURACIÓN
-        =================================== */
+    /*
+     * ==========================================
+     * ACTUALIZAR RESUMEN
+     * ==========================================
+     */
 
-        function aplicarConfiguracion() {
+    function actualizarResumen(
+      tabId,
+      nombre,
+      fechaInput,
+      prioridadInput
+    ) {
 
-          const color =
-            colorTexto.value;
-
-          const tamano =
-            tamanoFuente.value;
-
-          const fuente =
-            tipografia.value;
-
-
-          document.body.style.color =
-            color;
-
-          document.body.style.fontSize =
-            tamano + "px";
-
-          document.body.style.fontFamily =
-            fuente;
-
-
-          localStorage.setItem(
-            "estudio_color",
-            color
-          );
-
-          localStorage.setItem(
-            "estudio_tamano",
-            tamano
-          );
-
-          localStorage.setItem(
-            "estudio_fuente",
-            fuente
-          );
-
-
-          configStatus.classList.add(
-            "show"
-          );
-
-
-          setTimeout(() => {
-
-            configStatus.classList.remove(
-              "show"
-            );
-
-          }, 2000);
-
-        }
-
-
-        aplicarConfig.addEventListener(
-          "click",
-          aplicarConfiguracion
+      const tabElement =
+        document.querySelector(
+          `.tab[data-tab="${tabId}"]`
         );
 
+      if (!tabElement) return;
+
+      const prioridad =
+        parseInt(prioridadInput.value) || 0;
+
+      const estilo =
+        obtenerEstiloPrioridad(prioridad);
+
+      tabElement.textContent =
+        `${estilo.simbolo} ${nombre} – ` +
+        `${fechaInput.value || "sin fecha"} – ` +
+        `prioridad ${prioridad || "-"}`;
+
+      tabElement.style.color =
+        estilo.color;
+
+      ordenarPestanas();
+
+    }
 
 
-        function cargarConfiguracion() {
+    /*
+     * ==========================================
+     * ORDENAR PESTAÑAS
+     * ==========================================
+     */
 
-          const color =
+    function ordenarPestanas() {
+
+      const tabs =
+        Array.from(
+          sidebar.querySelectorAll(".tab")
+        )
+        .filter(tab =>
+          ![
+            "inicio",
+            "terminal",
+            "config",
+            "ayuda"
+          ].includes(tab.dataset.tab)
+        );
+
+      tabs.sort((a, b) => {
+
+        const prioridadA =
+          parseInt(
             localStorage.getItem(
-              "estudio_color"
-            ) || "#00ff00";
+              a.dataset.tab + "_prioridad"
+            )
+          ) || 0;
 
-
-          const tamano =
+        const prioridadB =
+          parseInt(
             localStorage.getItem(
-              "estudio_tamano"
-            ) || "16";
+              b.dataset.tab + "_prioridad"
+            )
+          ) || 0;
+
+        return prioridadB - prioridadA;
+
+      });
+
+      tabs.forEach(tab => {
+
+        sidebar.insertBefore(
+          tab,
+          addTabBtn
+        );
+
+      });
+
+    }
 
 
-          const fuente =
-            localStorage.getItem(
-              "estudio_fuente"
-            ) || "'Courier New', monospace";
+    /*
+     * ==========================================
+     * CREAR BOTÓN
+     * ==========================================
+     */
+
+    function crearBoton(texto, clase = "") {
+
+      const boton =
+        document.createElement("button");
+
+      boton.textContent = texto;
+
+      if (clase) {
+        boton.classList.add(clase);
+      }
+
+      return boton;
+
+    }
 
 
-          colorTexto.value =
-            color;
+    /*
+     * ==========================================
+     * CREAR PESTAÑA
+     * ==========================================
+     */
 
-          tamanoFuente.value =
-            tamano;
+    function crearPestana(
+      tabId,
+      nombre,
+      datos = {}
+    ) {
 
-          tipografia.value =
-            fuente;
+      const datosFinales = {
+
+        titulo: datos.titulo || "",
+
+        fecha: datos.fecha || "",
+
+        prioridad: datos.prioridad || "",
+
+        contenido: datos.contenido || ""
+
+      };
 
 
-          document.body.style.color =
-            color;
+      /*
+       * TAB DE SIDEBAR
+       */
 
-          document.body.style.fontSize =
-            tamano + "px";
+      const newTab =
+        document.createElement("div");
 
-          document.body.style.fontFamily =
-            fuente;
+      newTab.classList.add("tab");
 
-        }
+      newTab.dataset.tab =
+        tabId;
+
+      newTab.textContent =
+        nombre;
+
+      sidebar.insertBefore(
+        newTab,
+        addTabBtn
+      );
 
 
+      /*
+       * CONTENIDO
+       */
 
-        /* ==================================
-           GUARDAR PESTAÑA
-        =================================== */
+      const newContent =
+        document.createElement("div");
 
-        function guardarPestana(
-          id,
-          datos
+      newContent.id =
+        tabId;
+
+      newContent.classList.add(
+        "tab-content"
+      );
+
+
+      /*
+       * TÍTULO
+       */
+
+      const tituloLabel =
+        document.createElement("label");
+
+      tituloLabel.textContent =
+        "Título del tema:";
+
+      const tituloInput =
+        document.createElement("input");
+
+      tituloInput.type = "text";
+
+      tituloInput.placeholder =
+        "Título del tema";
+
+      tituloInput.value =
+        datosFinales.titulo;
+
+
+      /*
+       * FECHA
+       */
+
+      const fechaLabel =
+        document.createElement("label");
+
+      fechaLabel.textContent =
+        "Fecha:";
+
+      const fechaInput =
+        document.createElement("input");
+
+      fechaInput.type = "date";
+
+      fechaInput.value =
+        datosFinales.fecha;
+
+
+      /*
+       * PRIORIDAD
+       */
+
+      const prioridadLabel =
+        document.createElement("label");
+
+      prioridadLabel.textContent =
+        "Prioridad (1-5):";
+
+      const prioridadInput =
+        document.createElement("input");
+
+      prioridadInput.type = "number";
+
+      prioridadInput.min = "1";
+
+      prioridadInput.max = "5";
+
+      prioridadInput.placeholder =
+        "Prioridad (1-5)";
+
+      prioridadInput.value =
+        datosFinales.prioridad;
+
+
+      /*
+       * APUNTES
+       */
+
+      const textarea =
+        document.createElement("textarea");
+
+      textarea.placeholder =
+        "Escribe tus apuntes aquí...";
+
+      textarea.value =
+        datosFinales.contenido;
+
+
+      /*
+       * GUARDAR
+       */
+
+      function guardar() {
+
+        let prioridad =
+          parseInt(prioridadInput.value);
+
+        if (
+          prioridad &&
+          (
+            prioridad < 1 ||
+            prioridad > 5
+          )
         ) {
 
-          localStorage.setItem(
-            id,
-            JSON.stringify(datos)
-          );
+          prioridadInput.value = "";
+
+          prioridad = "";
 
         }
 
+        guardarDatosTab(
+          tabId,
+          {
+            nombre: nombre,
+            titulo: tituloInput.value,
+            fecha: fechaInput.value,
+            prioridad: prioridadInput.value,
+            contenido: textarea.value
+          }
+        );
 
-
-        /* ==================================
-           DESCARGAR ARCHIVO
-        =================================== */
-
-        function descargarArchivo(
-          contenido,
+        actualizarResumen(
+          tabId,
           nombre,
-          tipo
-        ) {
+          fechaInput,
+          prioridadInput
+        );
 
-          const blob =
-            new Blob(
-              [contenido],
-              { type: tipo }
+      }
+
+
+      [
+        tituloInput,
+        fechaInput,
+        prioridadInput,
+        textarea
+      ].forEach(input => {
+
+        input.addEventListener(
+          "input",
+          guardar
+        );
+
+      });
+
+
+      /*
+       * TÍTULO VISUAL
+       */
+
+      const heading =
+        document.createElement("h1");
+
+      heading.textContent =
+        nombre;
+
+
+      /*
+       * BOTÓN ELIMINAR
+       */
+
+      const deleteBtn =
+        crearBoton(
+          "Eliminar pestaña",
+          "danger"
+        );
+
+      deleteBtn.addEventListener(
+        "click",
+        () => {
+
+          const confirmar =
+            confirm(
+              `¿Eliminar la pestaña "${nombre}"?`
             );
 
+          if (!confirmar) return;
 
-          const enlace =
-            document.createElement("a");
+          newTab.remove();
+          newContent.remove();
 
-
-          const url =
-            URL.createObjectURL(blob);
-
-
-          enlace.href = url;
-
-          enlace.download = nombre;
-
-          document.body.appendChild(
-            enlace
+          localStorage.removeItem(
+            tabId + "_nombre"
           );
 
-          enlace.click();
+          localStorage.removeItem(
+            tabId + "_titulo"
+          );
+
+          localStorage.removeItem(
+            tabId + "_fecha"
+          );
+
+          localStorage.removeItem(
+            tabId + "_prioridad"
+          );
+
+          localStorage.removeItem(
+            tabId + "_contenido"
+          );
+
+          activateTab(
+            document.querySelector(
+              '[data-tab="inicio"]'
+            )
+          );
+
+        }
+      );
 
 
-          enlace.remove();
+      /*
+       * BOTÓN RENOMBRAR
+       */
+
+      const renameBtn =
+        crearBoton(
+          "Renombrar pestaña"
+        );
+
+      renameBtn.addEventListener(
+        "click",
+        () => {
+
+          const nuevoNombre =
+            prompt(
+              "Nuevo nombre para la pestaña:",
+              nombre
+            );
+
+          if (!nuevoNombre) return;
+
+          const nombreLimpio =
+            nuevoNombre.trim();
+
+          if (!nombreLimpio) return;
+
+          nombre =
+            nombreLimpio;
+
+          heading.textContent =
+            nombre;
+
+          guardar();
+
+        }
+      );
 
 
-          setTimeout(() => {
+      /*
+       * EXPORTAR TXT
+       */
 
-            URL.revokeObjectURL(url);
+      const exportTxtBtn =
+        crearBoton(
+          "Exportar apuntes (.txt)"
+        );
 
-          }, 1000);
+      exportTxtBtn.addEventListener(
+        "click",
+        () => {
+
+          const datos =
+            obtenerDatosTab(tabId);
+
+          const contenido =
+`Materia: ${datos.nombre}
+Título: ${datos.titulo || "Sin título"}
+Fecha: ${datos.fecha || "Sin fecha"}
+Prioridad: ${datos.prioridad || "Sin prioridad"}
+
+Apuntes:
+${datos.contenido}
+`;
+
+          descargarArchivo(
+            contenido,
+            `${datos.nombre}.txt`,
+            "text/plain"
+          );
+
+        }
+      );
+
+
+      /*
+       * EXPORTAR MARKDOWN
+       */
+
+      const exportMdBtn =
+        crearBoton(
+          "Exportar apuntes (.md)"
+        );
+
+      exportMdBtn.addEventListener(
+        "click",
+        () => {
+
+          const datos =
+            obtenerDatosTab(tabId);
+
+          const contenido =
+`# ${datos.nombre}
+
+**Título:** ${datos.titulo || "Sin título"}
+
+**Fecha:** ${datos.fecha || "Sin fecha"}
+
+**Prioridad:** ${datos.prioridad || "Sin prioridad"}
+
+## Apuntes
+
+${datos.contenido}
+`;
+
+          descargarArchivo(
+            contenido,
+            `${datos.nombre}.md`,
+            "text/markdown"
+          );
+
+        }
+      );
+
+
+      /*
+       * ESTADO
+       */
+
+      const estado =
+        document.createElement("p");
+
+      estado.className =
+        "estado";
+
+      estado.textContent =
+        "✓ Guardado automático activado";
+
+
+      /*
+       * CONSTRUIR CONTENIDO
+       */
+
+      newContent.appendChild(
+        heading
+      );
+
+      newContent.appendChild(
+        tituloLabel
+      );
+
+      newContent.appendChild(
+        tituloInput
+      );
+
+      newContent.appendChild(
+        document.createElement("br")
+      );
+
+      newContent.appendChild(
+        fechaLabel
+      );
+
+      newContent.appendChild(
+        fechaInput
+      );
+
+      newContent.appendChild(
+        document.createElement("br")
+      );
+
+      newContent.appendChild(
+        prioridadLabel
+      );
+
+      newContent.appendChild(
+        prioridadInput
+      );
+
+      newContent.appendChild(
+        document.createElement("br")
+      );
+
+      newContent.appendChild(
+        textarea
+      );
+
+      newContent.appendChild(
+        document.createElement("br")
+      );
+
+      newContent.appendChild(
+        deleteBtn
+      );
+
+      newContent.appendChild(
+        renameBtn
+      );
+
+      newContent.appendChild(
+        exportTxtBtn
+      );
+
+      newContent.appendChild(
+        exportMdBtn
+      );
+
+      newContent.appendChild(
+        estado
+      );
+
+
+      contentContainer.appendChild(
+        newContent
+      );
+
+
+      /*
+       * CLICK TAB
+       */
+
+      newTab.addEventListener(
+        "click",
+        () => activateTab(newTab)
+      );
+
+
+      /*
+       * GUARDAR DATOS INICIALES
+       */
+
+      guardarDatosTab(
+        tabId,
+        {
+          nombre: nombre,
+          titulo: datosFinales.titulo,
+          fecha: datosFinales.fecha,
+          prioridad: datosFinales.prioridad,
+          contenido: datosFinales.contenido
+        }
+      );
+
+
+      /*
+       * ACTUALIZAR RESUMEN
+       */
+
+      actualizarResumen(
+        tabId,
+        nombre,
+        fechaInput,
+        prioridadInput
+      );
+
+
+      return {
+        tab: newTab,
+        content: newContent
+      };
+
+    }
+
+
+    /*
+     * ==========================================
+     * DESCARGAR ARCHIVO
+     * ==========================================
+     */
+
+    function descargarArchivo(
+      contenido,
+      nombreArchivo,
+      tipo
+    ) {
+
+      const blob =
+        new Blob(
+          [contenido],
+          { type: tipo }
+        );
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const enlace =
+        document.createElement("a");
+
+      enlace.href = url;
+
+      enlace.download =
+        nombreArchivo;
+
+      document.body.appendChild(
+        enlace
+      );
+
+      enlace.click();
+
+      enlace.remove();
+
+      URL.revokeObjectURL(url);
+
+    }
+
+
+    /*
+     * ==========================================
+     * NUEVA PESTAÑA
+     * ==========================================
+     */
+
+    addTabBtn.addEventListener(
+      "click",
+      () => {
+
+        const nombre =
+          prompt(
+            "Nombre de la nueva pestaña:"
+          );
+
+        if (!nombre) return;
+
+        const nombreLimpio =
+          nombre.trim();
+
+        if (!nombreLimpio) return;
+
+        const newTabId =
+          `tab_${Date.now()}`;
+
+        crearPestana(
+          newTabId,
+          nombreLimpio
+        );
+
+        const tab =
+          document.querySelector(
+            `[data-tab="${newTabId}"]`
+          );
+
+        activateTab(tab);
+
+      }
+    );
+
+
+    /*
+     * ==========================================
+     * PESTAÑAS FIJAS
+     * ==========================================
+     */
+
+    document
+      .querySelectorAll(".tab")
+      .forEach(tab => {
+
+        tab.addEventListener(
+          "click",
+          () => activateTab(tab)
+        );
+
+      });
+
+
+    /*
+     * ==========================================
+     * RECUPERAR PESTAÑAS
+     * ==========================================
+     */
+
+    function recuperarPestanas() {
+
+      const ids = [];
+
+      for (
+        let i = 0;
+        i < localStorage.length;
+        i++
+      ) {
+
+        const key =
+          localStorage.key(i);
+
+        if (
+          key &&
+          key.startsWith("tab_") &&
+          key.endsWith("_nombre")
+        ) {
+
+          ids.push(
+            key.replace(
+              "_nombre",
+              ""
+            )
+          );
 
         }
 
+      }
 
 
-        /* ==================================
-           CREAR PESTAÑA
-        =================================== */
+      ids.forEach(tabId => {
 
-        function crearPestana(
-          id,
+        const datos =
+          obtenerDatosTab(tabId);
+
+        crearPestana(
+          tabId,
+          datos.nombre,
           datos
-        ) {
+        );
 
-          const nombreInicial =
-            datos.nombre || "Sin nombre";
+      });
+
+      ordenarPestanas();
+
+    }
 
 
-          /* --------------------------------
-             TAB
-          -------------------------------- */
+    /*
+     * ==========================================
+     * EXPORTAR TODO TXT
+     * ==========================================
+     */
 
-          const newTab =
-            document.createElement(
-              "div"
+    document
+      .getElementById("exportarTodo")
+      .addEventListener(
+        "click",
+        () => {
+
+          let contenidoFinal =
+            "=== EXPORTACIÓN DE APUNTES ===\n\n";
+
+          const tabs =
+            Array.from(
+              sidebar.querySelectorAll(".tab")
+            )
+            .filter(tab =>
+              tab.dataset.tab.startsWith(
+                "tab_"
+              )
             );
 
 
-          newTab.classList.add(
-            "tab"
-          );
-
-
-          newTab.dataset.tab =
-            id;
-
-
-          sidebar.insertBefore(
-            newTab,
-            addTabBtn
-          );
-
-
-
-          /* --------------------------------
-             CONTENIDO
-          -------------------------------- */
-
-          const newContent =
-            document.createElement(
-              "section"
-            );
-
-
-          newContent.id =
-            id;
-
-
-          newContent.classList.add(
-            "tab-content"
-          );
-
-
-
-          /* --------------------------------
-             TÍTULO
-          -------------------------------- */
-
-          const titulo =
-            document.createElement(
-              "h1"
-            );
-
-
-          titulo.textContent =
-            nombreInicial;
-
-
-
-          /* --------------------------------
-             TÍTULO DEL TEMA
-          -------------------------------- */
-
-          const tituloField =
-            document.createElement(
-              "div"
-            );
-
-
-          tituloField.className =
-            "field";
-
-
-          const tituloLabel =
-            document.createElement(
-              "label"
-            );
-
-
-          tituloLabel.textContent =
-            "Título del tema:";
-
-
-          const tituloInput =
-            document.createElement(
-              "input"
-            );
-
-
-          tituloInput.type =
-            "text";
-
-
-          tituloInput.placeholder =
-            "Título del tema";
-
-
-          tituloInput.value =
-            datos.titulo || "";
-
-
-
-          tituloField.appendChild(
-            tituloLabel
-          );
-
-
-          tituloField.appendChild(
-            tituloInput
-          );
-
-
-
-          /* --------------------------------
-             FECHA
-          -------------------------------- */
-
-          const fechaField =
-            document.createElement(
-              "div"
-            );
-
-
-          fechaField.className =
-            "field";
-
-
-          const fechaLabel =
-            document.createElement(
-              "label"
-            );
-
-
-          fechaLabel.textContent =
-            "Fecha:";
-
-
-          const fechaInput =
-            document.createElement(
-              "input"
-            );
-
-
-          fechaInput.type =
-            "date";
-
-
-          fechaInput.value =
-            datos.fecha || "";
-
-
-          fechaField.appendChild(
-            fechaLabel
-          );
-
-
-          fechaField.appendChild(
-            fechaInput
-          );
-
-
-
-          /* --------------------------------
-             PRIORIDAD
-          -------------------------------- */
-
-          const prioridadField =
-            document.createElement(
-              "div"
-            );
-
-
-          prioridadField.className =
-            "field";
-
-
-          const prioridadLabel =
-            document.createElement(
-              "label"
-            );
-
-
-          prioridadLabel.textContent =
-            "Prioridad (1-5):";
-
-
-          const prioridadInput =
-            document.createElement(
-              "input"
-            );
-
-
-          prioridadInput.type =
-            "number";
-
-
-          prioridadInput.min =
-            "1";
-
-
-          prioridadInput.max =
-            "5";
-
-
-          prioridadInput.value =
-            datos.prioridad || "";
-
-
-
-          prioridadField.appendChild(
-            prioridadLabel
-          );
-
-
-          prioridadField.appendChild(
-            prioridadInput
-          );
-
-
-
-          /* --------------------------------
-             APUNTES
-          -------------------------------- */
-
-          const textarea =
-            document.createElement(
-              "textarea"
-            );
-
-
-          textarea.className =
-            "notes";
-
-
-          textarea.placeholder =
-            "Escribe tus apuntes aquí...";
-
-
-          textarea.value =
-            datos.contenido || "";
-
-
-
-          /* --------------------------------
-             ESTADO
-          -------------------------------- */
-
-          const status =
-            document.createElement(
-              "div"
-            );
-
-
-          status.className =
-            "status";
-
-
-          status.textContent =
-            "✓ Apuntes guardados";
-
-
-
-          /* --------------------------------
-             BOTONES
-          -------------------------------- */
-
-          const buttons =
-            document.createElement(
-              "div"
-            );
-
-
-          buttons.className =
-            "buttons";
-
-
-
-          /* ==================================
-             ELIMINAR
-          =================================== */
-
-          const deleteBtn =
-            document.createElement(
-              "button"
-            );
-
-
-          deleteBtn.textContent =
-            "Eliminar pestaña";
-
-
-          deleteBtn.className =
-            "delete-btn";
-
-
-          deleteBtn.addEventListener(
-            "click",
-            () => {
-
-              const confirmar =
-                confirm(
-                  `¿Eliminar "${newTab.textContent}"?`
-                );
-
-
-              if (!confirmar) {
-                return;
-              }
-
-
-              localStorage.removeItem(
-                id
+          tabs.forEach(tab => {
+
+            const datos =
+              obtenerDatosTab(
+                tab.dataset.tab
               );
 
+            contenidoFinal +=
+`Materia: ${datos.nombre}
+Título: ${datos.titulo || "Sin título"}
+Fecha: ${datos.fecha || "Sin fecha"}
+Prioridad: ${datos.prioridad || "Sin prioridad"}
 
-              newTab.remove();
+Apuntes:
+${datos.contenido}
 
-              newContent.remove();
+-----------------------------
+
+`;
+
+          });
 
 
-              const inicio =
-                document.querySelector(
-                  '[data-tab="inicio"]'
-                );
-
-
-              if (inicio) {
-
-                activateTab(
-                  inicio
-                );
-
-              }
-
-            }
+          descargarArchivo(
+            contenidoFinal,
+            "Mis_Apuntes_Completos.txt",
+            "text/plain"
           );
 
 
+          document
+            .getElementById(
+              "estadoConfig"
+            )
+            .textContent =
+            "✓ Apuntes exportados correctamente.";
 
-          /* ==================================
-             RENOMBRAR
-          =================================== */
+        }
+      );
 
-          const renameBtn =
-            document.createElement(
-              "button"
+
+    /*
+     * ==========================================
+     * EXPORTAR TODO MARKDOWN
+     * ==========================================
+     */
+
+    document
+      .getElementById(
+        "exportarMarkdown"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          let contenidoFinal =
+            "# Mis Apuntes Completos\n\n";
+
+
+          const tabs =
+            Array.from(
+              sidebar.querySelectorAll(".tab")
+            )
+            .filter(tab =>
+              tab.dataset.tab.startsWith(
+                "tab_"
+              )
             );
 
 
-          renameBtn.textContent =
-            "Renombrar pestaña";
+          tabs.forEach(tab => {
 
-
-          renameBtn.addEventListener(
-            "click",
-            () => {
-
-              const nuevoNombre =
-                prompt(
-                  "Nuevo nombre para la pestaña:",
-                  newTab.textContent
-                );
-
-
-              if (
-                nuevoNombre === null
-              ) {
-                return;
-              }
-
-
-              const nombreLimpio =
-                nuevoNombre.trim();
-
-
-              if (!nombreLimpio) {
-                return;
-              }
-
-
-              newTab.textContent =
-                nombreLimpio;
-
-
-              titulo.textContent =
-                nombreLimpio;
-
-
-              guardarDatos();
-
-            }
-          );
-
-
-
-          /* ==================================
-             EXPORTAR TXT
-          =================================== */
-
-          const exportBtn =
-            document.createElement(
-              "button"
-            );
-
-
-          exportBtn.textContent =
-            "Exportar apuntes";
-
-
-          exportBtn.addEventListener(
-            "click",
-            () => {
-
-              descargarArchivo(
-
-                textarea.value,
-
-                `${limpiarNombreArchivo(newTab.textContent)}.txt`,
-
-                "text/plain"
-
+            const datos =
+              obtenerDatosTab(
+                tab.dataset.tab
               );
 
-            }
-          );
+            contenidoFinal +=
+`## ${datos.nombre}
 
+**Título:** ${datos.titulo || "Sin título"}
 
+**Fecha:** ${datos.fecha || "Sin fecha"}
 
-          /* ==================================
-             EXPORTAR MARKDOWN
-          =================================== */
+**Prioridad:** ${datos.prioridad || "Sin prioridad"}
 
-          const exportMdBtn =
-            document.createElement(
-              "button"
-            );
+### Apuntes
 
-
-          exportMdBtn.textContent =
-            "Exportar Markdown";
-
-
-          exportMdBtn.addEventListener(
-            "click",
-            () => {
-
-              const markdown =
-                `# ${newTab.textContent}
-
-## ${tituloInput.value || "Apuntes"}
-
-**Fecha:** ${fechaInput.value || "Sin fecha"}
-
-**Prioridad:** ${prioridadInput.value || "Sin prioridad"}
+${datos.contenido}
 
 ---
 
-${textarea.value}
 `;
 
+          });
 
-              descargarArchivo(
 
-                markdown,
-
-                `${limpiarNombreArchivo(newTab.textContent)}.md`,
-
-                "text/markdown"
-
-              );
-
-            }
+          descargarArchivo(
+            contenidoFinal,
+            "Mis_Apuntes_Completos.md",
+            "text/markdown"
           );
 
 
+          document
+            .getElementById(
+              "estadoConfig"
+            )
+            .textContent =
+            "✓ Markdown exportado correctamente.";
 
-          /* ==================================
-             GUARDAR DATOS
-          =================================== */
-
-          function guardarDatos() {
-
-            guardarPestana(
-
-              id,
-
-              {
-
-                nombre:
-                  newTab.textContent,
-
-                titulo:
-                  tituloInput.value,
-
-                fecha:
-                  fechaInput.value,
-
-                prioridad:
-                  prioridadInput.value,
-
-                contenido:
-                  textarea.value
-
-              }
-
-            );
-
-            actualizarResumen();
-
-          }
+        }
+      );
 
 
+    /*
+     * ==========================================
+     * IMPORTAR TXT
+     * ==========================================
+     */
 
-          /* ==================================
-             RESUMEN SIDEBAR
-          =================================== */
+    document
+      .getElementById(
+        "importarArchivo"
+      )
+      .addEventListener(
+        "change",
+        event => {
 
-          function actualizarResumen() {
+          const file =
+            event.target.files[0];
 
-            const fecha =
-              fechaInput.value ||
-              "sin fecha";
-
-
-            const prioridad =
-              prioridadInput.value ||
-              "-";
-
-
-            newTab.textContent =
-              `${newTab.dataset.nombreOriginal || newTab.textContent} – ${fecha} – prioridad ${prioridad}`;
-
-          }
+          if (!file) return;
 
 
-
-          /*
-             Para que renombrar no destruya
-             el nombre original del resumen,
-             guardamos el nombre actual.
-          */
-
-          newTab.dataset.nombreOriginal =
-            nombreInicial;
+          const reader =
+            new FileReader();
 
 
+          reader.onload =
+            e => {
 
-          function actualizarTextoTab() {
-
-            const fecha =
-              fechaInput.value ||
-              "sin fecha";
-
-
-            const prioridad =
-              prioridadInput.value ||
-              "-";
+              const contenido =
+                e.target.result;
 
 
-            newTab.textContent =
-              `${newTab.dataset.nombreOriginal} – ${fecha} – prioridad ${prioridad}`;
-
-          }
-
-
-
-          /* ==================================
-             EVENTOS DE GUARDADO
-          =================================== */
-
-          [
-            tituloInput,
-            fechaInput,
-            prioridadInput,
-            textarea
-          ].forEach(
-            elemento => {
-
-              elemento.addEventListener(
-                "input",
-                () => {
-
-                  guardarDatos();
-
-                  status.classList.add(
-                    "show"
-                  );
+              const nombre =
+                prompt(
+                  "Nombre para la pestaña importada:"
+                );
 
 
-                  setTimeout(() => {
+              if (!nombre) return;
 
-                    status.classList.remove(
-                      "show"
-                    );
 
-                  }, 800);
+              const nombreLimpio =
+                nombre.trim();
 
+
+              if (!nombreLimpio) return;
+
+
+              const newTabId =
+                `tab_${Date.now()}`;
+
+
+              crearPestana(
+                newTabId,
+                nombreLimpio,
+                {
+                  titulo: "",
+                  fecha: "",
+                  prioridad: "",
+                  contenido: contenido
                 }
               );
 
-            }
-          );
 
+              const tab =
+                document.querySelector(
+                  `[data-tab="${newTabId}"]`
+                );
 
 
-          /* ==================================
-             CONSTRUCCIÓN
-          =================================== */
+              activateTab(tab);
 
-          buttons.appendChild(
-            deleteBtn
-          );
 
-
-          buttons.appendChild(
-            renameBtn
-          );
-
-
-          buttons.appendChild(
-            exportBtn
-          );
-
-
-          buttons.appendChild(
-            exportMdBtn
-          );
-
-
-          newContent.appendChild(
-            titulo
-          );
-
-
-          newContent.appendChild(
-            tituloField
-          );
-
-
-          newContent.appendChild(
-            fechaField
-          );
-
-
-          newContent.appendChild(
-            prioridadField
-          );
-
-
-          newContent.appendChild(
-            textarea
-          );
-
-
-          newContent.appendChild(
-            status
-          );
-
-
-          newContent.appendChild(
-            buttons
-          );
-
-
-          content.appendChild(
-            newContent
-          );
-
-
-          configurarTab(
-            newTab
-          );
-
-
-          /* --------------------------------
-             RESUMEN INICIAL
-          -------------------------------- */
-
-          actualizarTextoTab();
-
-
-          return {
-
-            tab: newTab,
-
-            content: newContent
-
-          };
-
-        }
-
-
-
-        /* ==================================
-           CORREGIR RESUMEN AL RENOMBRAR
-        =================================== */
-
-        /*
-          Sobrescribimos el comportamiento
-          de renombrado para conservar fecha
-          y prioridad.
-        */
-
-
-        function actualizarResumenTab(
-          tab,
-          nombre
-        ) {
-
-          const id =
-            tab.dataset.tab;
-
-
-          const datos =
-            JSON.parse(
-              localStorage.getItem(id)
-            );
-
-
-          if (!datos) {
-            return;
-          }
-
-
-          tab.dataset.nombreOriginal =
-            nombre;
-
-
-          const fecha =
-            datos.fecha ||
-            "sin fecha";
-
-
-          const prioridad =
-            datos.prioridad ||
-            "-";
-
-
-          tab.textContent =
-            `${nombre} – ${fecha} – prioridad ${prioridad}`;
-
-        }
-
-
-
-        /* ==================================
-           NUEVA PESTAÑA
-        =================================== */
-
-        addTabBtn.addEventListener(
-          "click",
-          () => {
-
-            const nombre =
-              prompt(
-                "Nombre de la nueva pestaña:"
-              );
-
-
-            if (
-              nombre === null
-            ) {
-              return;
-            }
-
-
-            const nombreLimpio =
-              nombre.trim();
-
-
-            if (!nombreLimpio) {
-              return;
-            }
-
-
-            const id =
-              "tab_" +
-              Date.now();
-
-
-            const datos = {
-
-              nombre:
-                nombreLimpio,
-
-              titulo:
-                "",
-
-              fecha:
-                "",
-
-              prioridad:
-                "",
-
-              contenido:
-                ""
+              document
+                .getElementById(
+                  "estadoConfig"
+                )
+                .textContent =
+                "✓ Archivo importado correctamente.";
 
             };
 
 
-            crearPestana(
-              id,
-              datos
-            );
+          reader.readAsText(file);
+
+          event.target.value = "";
+
+        }
+      );
 
 
-            guardarPestana(
-              id,
-              datos
-            );
+    /*
+     * ==========================================
+     * CONFIGURACIÓN
+     * ==========================================
+     */
+
+    const aplicarConfigBtn =
+      document.getElementById(
+        "aplicarConfig"
+      );
 
 
-            const tab =
-              document.querySelector(
-                `[data-tab="${id}"]`
-              );
+    aplicarConfigBtn.addEventListener(
+      "click",
+      () => {
+
+        const color =
+          document.getElementById(
+            "colorTexto"
+          ).value;
+
+        const tamano =
+          document.getElementById(
+            "tamanoFuente"
+          ).value;
+
+        const tipografia =
+          document.getElementById(
+            "tipografia"
+          ).value;
 
 
-            if (tab) {
+        document.body.style.color =
+          color;
 
-              activateTab(
-                tab
-              );
+        document.body.style.fontSize =
+          tamano + "px";
 
-            }
+        document.body.style.fontFamily =
+          tipografia;
 
-          }
+
+        localStorage.setItem(
+          "colorTexto",
+          color
+        );
+
+        localStorage.setItem(
+          "tamanoFuente",
+          tamano
+        );
+
+        localStorage.setItem(
+          "tipografia",
+          tipografia
         );
 
 
-
-        /* ==================================
-           RECUPERAR PESTAÑAS
-        =================================== */
-
-        function cargarPestanas() {
-
-          const keys = [];
-
-
-          for (
-            let i = 0;
-            i < localStorage.length;
-            i++
-          ) {
-
-            const key =
-              localStorage.key(i);
-
-
-            if (
-              key &&
-              key.startsWith("tab_")
-            ) {
-
-              keys.push(key);
-
-            }
-
-          }
-
-
-          keys.sort();
-
-
-          keys.forEach(
-            key => {
-
-              try {
-
-                const datos =
-                  JSON.parse(
-                    localStorage.getItem(
-                      key
-                    )
-                  );
-
-
-                if (
-                  !datos ||
-                  !datos.nombre
-                ) {
-
-                  return;
-
-                }
-
-
-                crearPestana(
-                  key,
-                  datos
-                );
-
-
-              } catch (error) {
-
-                console.warn(
-                  "No se pudo recuperar:",
-                  key
-                );
-
-              }
-
-            }
-          );
-
-        }
-
-
-
-        /* ==================================
-           EXPORTAR TODO TXT
-        =================================== */
-
         document
           .getElementById(
-            "exportarTodo"
+            "estadoConfig"
           )
-          .addEventListener(
-            "click",
-            () => {
-
-              let contenidoFinal =
-                "=== EXPORTACIÓN DE APUNTES ===\n\n";
-
-
-              const keys =
-                obtenerKeysPestanas();
-
-
-              keys.forEach(
-                key => {
-
-                  const datos =
-                    obtenerDatos(
-                      key
-                    );
-
-
-                  if (!datos) {
-                    return;
-                  }
-
-
-                  contenidoFinal +=
-                    `Materia: ${datos.nombre}\n`;
-
-
-                  contenidoFinal +=
-                    `Título: ${datos.titulo || "Sin título"}\n`;
-
-
-                  contenidoFinal +=
-                    `Fecha: ${datos.fecha || "Sin fecha"}\n`;
-
-
-                  contenidoFinal +=
-                    `Prioridad: ${datos.prioridad || "-"}\n\n`;
-
-
-                  contenidoFinal +=
-                    `Apuntes:\n${datos.contenido || ""}\n\n`;
-
-
-                  contenidoFinal +=
-                    "----------------------------------------\n\n";
-
-                }
-              );
-
-
-              descargarArchivo(
-
-                contenidoFinal,
-
-                "Mis_Apuntes_Completos.txt",
-
-                "text/plain"
-
-              );
-
-            }
-          );
-
-
-
-        /* ==================================
-           EXPORTAR TODO MARKDOWN
-        =================================== */
-
-        document
-          .getElementById(
-            "exportarMarkdown"
-          )
-          .addEventListener(
-            "click",
-            () => {
-
-              let markdown =
-                "# Mis Apuntes Completos\n\n";
-
-
-              const keys =
-                obtenerKeysPestanas();
-
-
-              keys.forEach(
-                key => {
-
-                  const datos =
-                    obtenerDatos(
-                      key
-                    );
-
-
-                  if (!datos) {
-                    return;
-                  }
-
-
-                  markdown +=
-                    `## ${datos.nombre}\n\n`;
-
-
-                  markdown +=
-                    `**Título:** ${datos.titulo || "Sin título"}\n\n`;
-
-
-                  markdown +=
-                    `**Fecha:** ${datos.fecha || "Sin fecha"}\n\n`;
-
-
-                  markdown +=
-                    `**Prioridad:** ${datos.prioridad || "-"}\n\n`;
-
-
-                  markdown +=
-                    `${datos.contenido || ""}\n\n`;
-
-
-                  markdown +=
-                    "---\n\n";
-
-                }
-              );
-
-
-              descargarArchivo(
-
-                markdown,
-
-                "Mis_Apuntes_Completos.md",
-
-                "text/markdown"
-
-              );
-
-            }
-          );
-
-
-
-        /* ==================================
-           IMPORTAR TXT
-        =================================== */
-
-        document
-          .getElementById(
-            "importarArchivo"
-          )
-          .addEventListener(
-            "change",
-            event => {
-
-              const file =
-                event.target.files[0];
-
-
-              if (!file) {
-                return;
-              }
-
-
-              const reader =
-                new FileReader();
-
-
-              reader.onload =
-                e => {
-
-                  const contenido =
-                    e.target.result;
-
-
-                  const nombre =
-                    prompt(
-                      "Nombre para la pestaña importada:"
-                    );
-
-
-                  if (
-                    nombre === null
-                  ) {
-
-                    event.target.value =
-                      "";
-
-                    return;
-
-                  }
-
-
-                  const nombreLimpio =
-                    nombre.trim();
-
-
-                  if (!nombreLimpio) {
-
-                    event.target.value =
-                      "";
-
-                    return;
-
-                  }
-
-
-                  const id =
-                    "tab_" +
-                    Date.now();
-
-
-                  const datos = {
-
-                    nombre:
-                      nombreLimpio,
-
-                    titulo:
-                      "Archivo importado",
-
-                    fecha:
-                      "",
-
-                    prioridad:
-                      "",
-
-                    contenido:
-                      contenido
-
-                  };
-
-
-                  crearPestana(
-                    id,
-                    datos
-                  );
-
-
-                  guardarPestana(
-                    id,
-                    datos
-                  );
-
-
-                  const tab =
-                    document.querySelector(
-                      `[data-tab="${id}"]`
-                    );
-
-
-                  if (tab) {
-
-                    activateTab(
-                      tab
-                    );
-
-                  }
-
-
-                  const importStatus =
-                    document.getElementById(
-                      "importStatus"
-                    );
-
-
-                  importStatus.textContent =
-                    "✓ Archivo importado correctamente";
-
-
-                  importStatus.classList.add(
-                    "show"
-                  );
-
-
-                  setTimeout(() => {
-
-                    importStatus.classList.remove(
-                      "show"
-                    );
-
-                  }, 2500);
-
-
-                  event.target.value =
-                    "";
-
-                };
-
-
-              reader.readAsText(
-                file
-              );
-
-            }
-          );
-
-
-
-        /* ==================================
-           FUNCIONES AUXILIARES
-        =================================== */
-
-        function obtenerKeysPestanas() {
-
-          const keys = [];
-
-
-          for (
-            let i = 0;
-            i < localStorage.length;
-            i++
-          ) {
-
-            const key =
-              localStorage.key(i);
-
-
-            if (
-              key &&
-              key.startsWith("tab_")
-            ) {
-
-              keys.push(key);
-
-            }
-
-          }
-
-
-          return keys.sort();
-
-        }
-
-
-
-        function obtenerDatos(key) {
-
-          try {
-
-            return JSON.parse(
-              localStorage.getItem(
-                key
-              )
-            );
-
-          } catch {
-
-            return null;
-
-          }
-
-        }
-
-
-
-        function limpiarNombreArchivo(
-          nombre
-        ) {
-
-          return nombre
-
-            .replace(
-              /[<>:"/\\|?*]/g,
-              "_"
-            )
-
-            .trim()
-
-            .substring(
-              0,
-              100
-            )
-
-            || "apuntes";
-
-        }
-
-
-
-        /* ==================================
-           GITHUB
-        =================================== */
-
-        document
-          .getElementById(
-            "githubInfo"
-          )
-          .addEventListener(
-            "click",
-            () => {
-
-              alert(
-                "Para conectar Estudio Hacker con GitHub de forma segura, no debes colocar un token personal directamente en este HTML. Se recomienda utilizar un backend o una función serverless que mantenga el token fuera del navegador."
-              );
-
-            }
-          );
-
-
-
-        /* ==================================
-           INICIAR
-        =================================== */
-
-        cargarConfiguracion();
-
-        cargarPestanas();
-
+          .textContent =
+          "✓ Configuración guardada.";
 
       }
-
     );
+
+
+    /*
+     * ==========================================
+     * CARGAR CONFIGURACIÓN
+     * ==========================================
+     */
+
+    function cargarConfiguracion() {
+
+      const color =
+        localStorage.getItem(
+          "colorTexto"
+        ) || "#00ff00";
+
+      const tamano =
+        localStorage.getItem(
+          "tamanoFuente"
+        ) || "16";
+
+      const tipografia =
+        localStorage.getItem(
+          "tipografia"
+        ) ||
+        "'Courier New', monospace";
+
+
+      document.getElementById(
+        "colorTexto"
+      ).value = color;
+
+      document.getElementById(
+        "tamanoFuente"
+      ).value = tamano;
+
+      document.getElementById(
+        "tipografia"
+      ).value = tipografia;
+
+
+      document.body.style.color =
+        color;
+
+      document.body.style.fontSize =
+        tamano + "px";
+
+      document.body.style.fontFamily =
+        tipografia;
+
+    }
+
+
+    /*
+     * ==========================================
+     * INICIAR SISTEMA
+     * ==========================================
+     */
+
+    cargarConfiguracion();
+
+    recuperarPestanas();
+
+    ordenarPestanas();
 
   </script>
 
 </body>
-
 </html>
+
