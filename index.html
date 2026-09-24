@@ -775,27 +775,66 @@ AYUDA
 ========== */
 
 document
-.getElementById(
-"helpSearch"
-)
-.addEventListener(
-"input",
-e=>{
+.getElementById("helpSearch")
+.addEventListener("input", e => {
 
-const texto=
-e.target.value
-.toLowerCase();
+    const texto = e.target.value.toLowerCase();
 
+    document
+    .querySelectorAll("#helpContent .help-section")
+    .forEach(section => {
+
+        section.style.display =
+            section.innerText
+            .toLowerCase()
+            .includes(texto)
+                ? ""
+                : "none";
+
+    });
+
+});
+function crearMateria(nombre){
+
+    const nuevaMateria = {
+        id: Date.now(),
+        nombre: nombre || "Nueva Materia",
+        titulo: "",
+        fecha: "",
+        prioridad: 1,
+        horas: 0,
+        contenido: ""
+    };
+
+    materias.push(nuevaMateria);
+
+    guardarMaterias();
+    renderMaterias();
+}
+function guardarMaterias(){
+
+    localStorage.setItem(
+        "materias",
+        JSON.stringify(materias)
+    );
+
+}
 document
-.querySelectorAll(
-"#helpContent .help-section"
-)
-.forEach(section=>{
+.querySelector(".add-tab")
+.addEventListener("click", () => {
 
-section.style.display=
-section.innerText
-.toLowerCase()
-.
+    const nombre = prompt(
+        "Nombre de la nueva materia:"
+    );
+
+    if(!nombre || !nombre.trim()){
+        return;
+    }
+
+    crearMateria(nombre.trim());
+
+});
+
   /* =====================
 RENDER MATERIAS
 ===================== */
