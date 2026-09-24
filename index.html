@@ -1,4 +1,143 @@
-<div id="config" class="tab-content">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estudio Hacker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #000;
+      color: #00ff00;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #111;
+      border-right: 1px solid #00ff00;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab {
+      padding: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #00ff00;
+      transition: background 0.3s;
+    }
+
+    .tab:hover {
+      background-color: #222;
+    }
+
+    .tab.active {
+      background-color: #00ff00;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .add-tab {
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #222;
+      border-top: 1px solid #00ff00;
+    }
+
+    .add-tab:hover {
+      background-color: #333;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="tab active" data-tab="inicio">Inicio</div>
+    <div class="tab" data-tab="terminal">Terminal</div>
+    <div class="tab" data-tab="config">Configuración</div>
+    <div class="add-tab">+ Nueva pestaña</div>
+  </div>
+
+  <div class="content">
+    <div id="inicio" class="tab-content active">
+      <h1>Panel de Estudio</h1>
+      <p>Organiza tus materias y proyectos aquí.</p>
+    </div>
+    <div id="terminal" class="tab-content">
+      <h1>Terminal</h1>
+      <pre>
+> ping servidor
+Respuesta: conexión establecida
+> ls
+Matemáticas  Física  Historia
+      </pre>
+    </div>
+    <div id="config" class="tab-content">
+      <h1>Configuración</h1>
+      <p>Ajusta parámetros del sistema.</p>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.querySelector('.sidebar');
+    const addTabBtn = document.querySelector('.add-tab');
+
+    function activateTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      tab.classList.add('active');
+      const target = document.getElementById(tab.dataset.tab);
+      target.classList.add('active');
+    }
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => activateTab(tab));
+    });
+
+    addTabBtn.addEventListener('click', () => {
+      const nombre = prompt("Nombre de la nueva pestaña (ej: Matemáticas, Historia):");
+      if (!nombre) return;
+
+      const newTabId = `tab_${Date.now()}`;
+
+      const newTab = document.createElement('div');
+      newTab.classList.add('tab');
+      newTab.dataset.tab = newTabId;
+      newTab.textContent = nombre;
+      sidebar.insertBefore(newTab, addTabBtn);
+
+      const newContent = document.createElement('div');
+      newContent.id = newTabId;
+      newContent.classList.add('tab-content');
+      newContent.innerHTML = `<h1>${nombre}</h1><p>Aquí puedes escribir tus apuntes de ${nombre}...</p>`;
+      document.querySelector('.content').appendChild(newContent);
+
+      newTab.addEventListener('click', () => activateTab(newTab));
+      activateTab(newTab);
+    });
+ <div id="config" class="tab-content">
   <h1>Configuración</h1>
   <p>Ajusta parámetros del sistema:</p>
 
@@ -36,3 +175,6 @@
     document.body.style.fontFamily = tipografia;
   });
 </script>
+
+</body>
+</html>
