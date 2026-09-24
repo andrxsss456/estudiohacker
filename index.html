@@ -432,7 +432,146 @@ Matemáticas  Física  Historia
       }
     }
   });
+
+  const sidebar = document.querySelector('.sidebar');
+  const addTabBtn = document.querySelector('.add-tab');
+
+  function activateTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    tab.classList.add('active');
+    const target = document.getElementById(tab.dataset.tab);
+    target.classList.add('active');
+  }
+
+  // Activar pestañas existentes
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab));
+  });
+
+  // Crear nuevas pestañas con nombre, apuntes y botón eliminar
+  addTabBtn.addEventListener('click', () => {
+    const nombre = prompt("Nombre de la nueva pestaña (ej: Matemáticas, Historia):");
+    if (!nombre) return;
+
+    const newTabId = `tab_${Date.now()}`;
+
+    const newTab = document.createElement('div');
+    newTab.classList.add('tab');
+    newTab.dataset.tab = newTabId;
+    newTab.textContent = nombre;
+    sidebar.insertBefore(newTab, addTabBtn);
+
+    const newContent = document.createElement('div');
+    newContent.id = newTabId;
+    newContent.classList.add('tab-content');
+
+    // Área editable para apuntes
+    const textarea = document.createElement('textarea');
+    textarea.style.width = "100%";
+    textarea.style.height = "300px";
+    textarea.style.backgroundColor = "#000";
+    textarea.style.color = "#00ff00";
+    textarea.style.fontFamily = "'Courier New', monospace";
+    textarea.value = "";
+
+    textarea.addEventListener('input', () => {
+      localStorage.setItem(newTabId, JSON.stringify({
+        nombre: nombre,
+        contenido: textarea.value
+      }));
+    });
+
+    // Botón eliminar pestaña
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = "Eliminar pestaña";
+    deleteBtn.style.marginTop = "10px";
+    deleteBtn.style.backgroundColor = "#222";
+    deleteBtn.style.color = "#00ff00";
+    deleteBtn.style.border = "1px solid #00ff00";
+    deleteBtn.style.cursor = "pointer";
+
+    deleteBtn.addEventListener('click', () => {
+      // Eliminar pestaña y contenido
+      newTab.remove();
+      newContent.remove();
+      localStorage.removeItem(newTabId);
+    });
+
+    newContent.innerHTML = `<h1>${nombre}</h1>`;
+    newContent.appendChild(textarea);
+    newContent.appendChild(deleteBtn);
+    document.querySelector('.content').appendChild(newContent);
+
+    newTab.addEventListener('click', () => activateTab(newTab));
+    activateTab(newTab);
+
+    // Guardar pestaña en localStorage
+    localStorage.setItem(newTabId, JSON.stringify({
+      nombre: nombre,
+      contenido: ""
+    }));
+  });
+
+  // Recuperar pestañas guardadas al cargar
+  window.addEventListener('load', () => {
+    for (let key in localStorage) {
+      if (key.startsWith("tab_")) {
+        const data = JSON.parse(localStorage.getItem(key));
+        if (!data) continue;
+
+        const newTab = document.createElement('div');
+        newTab.classList.add('tab');
+        newTab.dataset.tab = key;
+        newTab.textContent = data.nombre;
+        sidebar.insertBefore(newTab, addTabBtn);
+
+        const newContent = document.createElement('div');
+        newContent.id = key;
+        newContent.classList.add('tab-content');
+
+        const textarea = document.createElement('textarea');
+        textarea.style.width = "100%";
+        textarea.style.height = "300px";
+        textarea.style.backgroundColor = "#000";
+        textarea.style.color = "#00ff00";
+        textarea.style.fontFamily = "'Courier New', monospace";
+        textarea.value = data.contenido || "";
+
+        textarea.addEventListener('input', () => {
+          localStorage.setItem(key, JSON.stringify({
+            nombre: data.nombre,
+            contenido: textarea.value
+          }));
+        });
+
+        // Botón eliminar pestaña
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = "Eliminar pestaña";
+        deleteBtn.style.marginTop = "10px";
+        deleteBtn.style.backgroundColor = "#222";
+        deleteBtn.style.color = "#00ff00";
+        deleteBtn.style.border = "1px solid #00ff00";
+        deleteBtn.style.cursor = "pointer";
+
+        deleteBtn.addEventListener('click', () => {
+          newTab.remove();
+          newContent.remove();
+          localStorage.removeItem(key);
+        });
+
+        newContent.innerHTML = `<h1>${data.nombre}</h1>`;
+        newContent.appendChild(textarea);
+        newContent.appendChild(deleteBtn);
+        document.querySelector('.content').appendChild(newContent);
+
+        newTab.addEventListener('click', () => activateTab(newTab));
+      }
+    }
+  });
 </script>
+
 
 
 
