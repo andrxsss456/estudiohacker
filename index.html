@@ -2,30 +2,45 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Estudio Hacker</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: "Courier New", monospace;
       background-color: #000;
       color: #00ff00;
       display: flex;
       height: 100vh;
+      overflow: hidden;
     }
 
+    /* =========================
+       BARRA LATERAL
+    ========================== */
+
     .sidebar {
-      width: 220px;
+      width: 230px;
+      min-width: 230px;
       background-color: #111;
       border-right: 1px solid #00ff00;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     .tab {
-      padding: 12px;
+      padding: 14px 12px;
       cursor: pointer;
       border-bottom: 1px solid #00ff00;
-      transition: background 0.3s;
+      transition: background 0.2s, color 0.2s;
+      word-break: break-word;
     }
 
     .tab:hover {
@@ -39,541 +54,892 @@
     }
 
     .add-tab {
-      padding: 12px;
+      padding: 14px 12px;
       text-align: center;
       cursor: pointer;
       background-color: #222;
       border-top: 1px solid #00ff00;
+      margin-top: auto;
     }
 
     .add-tab:hover {
       background-color: #333;
     }
 
+    /* =========================
+       CONTENIDO
+    ========================== */
+
     .content {
       flex: 1;
-      padding: 20px;
+      padding: 25px;
       overflow-y: auto;
     }
 
     .tab-content {
       display: none;
-      animation: fadeIn 0.5s;
+      animation: fadeIn 0.3s ease;
     }
 
     .tab-content.active {
       display: block;
     }
 
+    h1 {
+      margin-top: 0;
+      color: inherit;
+    }
+
+    /* =========================
+       TERMINAL
+    ========================== */
+
+    .terminal {
+      background: #050505;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      min-height: 200px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    /* =========================
+       EDITOR DE APUNTES
+    ========================== */
+
+    .notes {
+      width: 100%;
+      min-height: 400px;
+      resize: vertical;
+
+      padding: 15px;
+
+      background-color: #000;
+      color: #00ff00;
+
+      border: 1px solid #00ff00;
+      outline: none;
+
+      font-family: inherit;
+      font-size: inherit;
+
+      line-height: 1.5;
+    }
+
+    .notes:focus {
+      box-shadow: 0 0 8px #00ff00;
+    }
+
+    /* =========================
+       BOTONES
+    ========================== */
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      margin-top: 12px;
+      padding: 10px 15px;
+
+      background-color: #220000;
+      color: #ff4444;
+
+      border: 1px solid #ff4444;
+    }
+
+    .delete-btn:hover {
+      background-color: #440000;
+    }
+
+    .apply-btn {
+      padding: 10px 18px;
+
+      background-color: #00ff00;
+      color: #000;
+
+      border: 1px solid #00ff00;
+      font-weight: bold;
+    }
+
+    .apply-btn:hover {
+      background-color: #66ff66;
+    }
+
+    /* =========================
+       CONFIGURACIÓN
+    ========================== */
+
+    .config-box {
+      max-width: 500px;
+      border: 1px solid #00ff00;
+      padding: 20px;
+      background-color: #050505;
+    }
+
+    .config-row {
+      margin-bottom: 20px;
+    }
+
+    .config-row label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="number"],
+    select {
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 8px;
+      font-family: inherit;
+    }
+
+    input[type="color"] {
+      width: 60px;
+      height: 35px;
+      background: #000;
+      border: 1px solid #00ff00;
+      cursor: pointer;
+    }
+
+    /* =========================
+       MENSAJE DE GUARDADO
+    ========================== */
+
+    .save-status {
+      margin-top: 10px;
+      color: #00ff00;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .save-status.show {
+      opacity: 1;
+    }
+
+    /* =========================
+       ANIMACIÓN
+    ========================== */
+
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* =========================
+       MÓVIL
+    ========================== */
+
+    @media (max-width: 700px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        max-height: 220px;
+        border-right: none;
+        border-bottom: 1px solid #00ff00;
+      }
+
+      .add-tab {
+        margin-top: 0;
+      }
+
+      .content {
+        padding: 15px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="sidebar">
-    <div class="tab active" data-tab="inicio">Inicio</div>
-    <div class="tab" data-tab="terminal">Terminal</div>
-    <div class="tab" data-tab="config">Configuración</div>
-    <div class="add-tab">+ Nueva pestaña</div>
+
+  <!-- =========================
+       BARRA LATERAL
+  ========================== -->
+
+  <div class="sidebar" id="sidebar">
+
+    <div class="tab active" data-tab="inicio">
+      Inicio
+    </div>
+
+    <div class="tab" data-tab="terminal">
+      Terminal
+    </div>
+
+    <div class="tab" data-tab="config">
+      Configuración
+    </div>
+
+    <div class="add-tab" id="addTab">
+      + Nueva pestaña
+    </div>
+
   </div>
 
-  <div class="content">
+
+  <!-- =========================
+       CONTENIDO PRINCIPAL
+  ========================== -->
+
+  <div class="content" id="content">
+
+    <!-- INICIO -->
+
     <div id="inicio" class="tab-content active">
+
       <h1>Panel de Estudio</h1>
-      <p>Organiza tus materias y proyectos aquí.</p>
+
+      <p>
+        Bienvenido a tu espacio de estudio.
+      </p>
+
+      <p>
+        Crea pestañas para organizar tus materias,
+        proyectos y apuntes.
+      </p>
+
+      <p>
+        &gt; Sistema iniciado correctamente...
+      </p>
+
     </div>
+
+
+    <!-- TERMINAL -->
+
     <div id="terminal" class="tab-content">
+
       <h1>Terminal</h1>
-      <pre>
-> ping servidor
+
+      <div class="terminal">
+&gt; ping servidor
+
 Respuesta: conexión establecida
-> ls
-Matemáticas  Física  Historia
-      </pre>
+
+&gt; ls
+
+Matemáticas
+Física
+Historia
+
+&gt; status
+
+Sistema: ONLINE
+Almacenamiento: localStorage
+        </div>
+
     </div>
+
+
+    <!-- CONFIGURACIÓN -->
+
     <div id="config" class="tab-content">
+
       <h1>Configuración</h1>
-      <p>Ajusta parámetros del sistema.</p>
+
+      <div class="config-box">
+
+        <div class="config-row">
+
+          <label for="colorTexto">
+            Color del texto:
+          </label>
+
+          <input
+            type="color"
+            id="colorTexto"
+            value="#00ff00"
+          >
+
+        </div>
+
+
+        <div class="config-row">
+
+          <label for="tamanoFuente">
+            Tamaño de fuente:
+          </label>
+
+          <input
+            type="number"
+            id="tamanoFuente"
+            value="16"
+            min="10"
+            max="40"
+          >
+
+          px
+
+        </div>
+
+
+        <div class="config-row">
+
+          <label for="tipografia">
+            Tipografía:
+          </label>
+
+          <select id="tipografia">
+
+            <option value="'Courier New', monospace">
+              Courier New
+            </option>
+
+            <option value="Consolas, monospace">
+              Consolas
+            </option>
+
+            <option value="Monaco, monospace">
+              Monaco
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <button
+          class="apply-btn"
+          id="aplicarConfig"
+          type="button"
+        >
+          Aplicar cambios
+        </button>
+
+        <div
+          class="save-status"
+          id="saveStatus"
+        >
+          ✓ Configuración guardada
+        </div>
+
+      </div>
+
     </div>
+
   </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
 
   <script>
-    const sidebar = document.querySelector('.sidebar');
-    const addTabBtn = document.querySelector('.add-tab');
 
-    function activateTab(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.addEventListener("DOMContentLoaded", () => {
 
-      tab.classList.add('active');
-      const target = document.getElementById(tab.dataset.tab);
-      target.classList.add('active');
-    }
+      /* =========================
+         ELEMENTOS PRINCIPALES
+      ========================== */
 
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => activateTab(tab));
-    });
+      const sidebar = document.getElementById("sidebar");
+      const content = document.getElementById("content");
+      const addTabBtn = document.getElementById("addTab");
 
-    addTabBtn.addEventListener('click', () => {
-      const nombre = prompt("Nombre de la nueva pestaña (ej: Matemáticas, Historia):");
-      if (!nombre) return;
 
-      const newTabId = `tab_${Date.now()}`;
+      /* =========================
+         CONFIGURACIÓN
+      ========================== */
 
-      const newTab = document.createElement('div');
-      newTab.classList.add('tab');
-      newTab.dataset.tab = newTabId;
-      newTab.textContent = nombre;
-      sidebar.insertBefore(newTab, addTabBtn);
+      const colorTexto =
+        document.getElementById("colorTexto");
 
-      const newContent = document.createElement('div');
-      newContent.id = newTabId;
-      newContent.classList.add('tab-content');
-      newContent.innerHTML = `<h1>${nombre}</h1><p>Aquí puedes escribir tus apuntes de ${nombre}...</p>`;
-      document.querySelector('.content').appendChild(newContent);
+      const tamanoFuente =
+        document.getElementById("tamanoFuente");
 
-      newTab.addEventListener('click', () => activateTab(newTab));
-      activateTab(newTab);
-    });
- <div id="config" class="tab-content">
-  <h1>Configuración</h1>
-  <p>Ajusta parámetros del sistema:</p>
+      const tipografia =
+        document.getElementById("tipografia");
 
-  <!-- Selector de color de texto -->
-  <label for="colorTexto">Color del texto:</label>
-  <input type="color" id="colorTexto" value="#00ff00"><br><br>
+      const aplicarConfig =
+        document.getElementById("aplicarConfig");
 
-  <!-- Selector de tamaño de fuente -->
-  <label for="tamanoFuente">Tamaño de fuente:</label>
-  <input type="number" id="tamanoFuente" value="16"> px<br><br>
+      const saveStatus =
+        document.getElementById("saveStatus");
 
-  <!-- Selector de tipografía -->
-  <label for="tipografia">Tipografía:</label>
-  <select id="tipografia">
-    <option value="'Courier New', monospace">Courier New</option>
-    <option value="Consolas, monospace">Consolas</option>
-    <option value="Monaco, monospace">Monaco</option>
-  </select><br><br>
 
-  <!-- Botón para aplicar cambios -->
-  <button id="aplicarConfig">Aplicar cambios</button>
-</div>
+      /* =========================
+         APLICAR CONFIGURACIÓN
+      ========================== */
 
-<script>
-  const aplicarBtn = document.getElementById('aplicarConfig');
+      function aplicarConfiguracion() {
 
-  aplicarBtn.addEventListener('click', () => {
-    const color = document.getElementById('colorTexto').value;
-    const tamano = document.getElementById('tamanoFuente').value;
-    const tipografia = document.getElementById('tipografia').value;
+        const color = colorTexto.value;
 
-    // Aplicar cambios globales
-    document.body.style.color = color;
-    document.body.style.fontSize = tamano + "px";
-    document.body.style.fontFamily = tipografia;
-  });
-<div id="config" class="tab-content">
-  <h1>Configuración</h1>
-  <p>Ajusta parámetros del sistema:</p>
+        const tamano = tamanoFuente.value;
 
-  <!-- Selector de color de texto -->
-  <label for="colorTexto">Color del texto:</label>
-  <input type="color" id="colorTexto" value="#00ff00"><br><br>
+        const fuente = tipografia.value;
 
-  <!-- Selector de tamaño de fuente -->
-  <label for="tamanoFuente">Tamaño de fuente:</label>
-  <input type="number" id="tamanoFuente" value="16"> px<br><br>
 
-  <!-- Selector de tipografía -->
-  <label for="tipografia">Tipografía:</label>
-  <select id="tipografia">
-    <option value="'Courier New', monospace">Courier New</option>
-    <option value="Consolas, monospace">Consolas</option>
-    <option value="Monaco, monospace">Monaco</option>
-  </select><br><br>
+        document.body.style.color = color;
 
-  <!-- Botón para aplicar cambios -->
-  <button id="aplicarConfig">Aplicar cambios</button>
-</div>
+        document.body.style.fontSize =
+          tamano + "px";
 
-<script>
-  const aplicarBtn = document.getElementById('aplicarConfig');
+        document.body.style.fontFamily =
+          fuente;
 
-  // Función para aplicar cambios
-  function aplicarConfiguracion() {
-    const color = document.getElementById('colorTexto').value;
-    const tamano = document.getElementById('tamanoFuente').value;
-    const tipografia = document.getElementById('tipografia').value;
 
-    // Aplicar cambios globales
-    document.body.style.color = color;
-    document.body.style.fontSize = tamano + "px";
-    document.body.style.fontFamily = tipografia;
+        /* Guardar configuración */
 
-    // Guardar en localStorage
-    localStorage.setItem('colorTexto', color);
-    localStorage.setItem('tamanoFuente', tamano);
-    localStorage.setItem('tipografia', tipografia);
-  }
+        localStorage.setItem(
+          "estudio_color",
+          color
+        );
 
-  aplicarBtn.addEventListener('click', aplicarConfiguracion);
+        localStorage.setItem(
+          "estudio_tamano",
+          tamano
+        );
 
-  // Al cargar la página, recuperar configuración guardada
-  window.addEventListener('load', () => {
-    const color = localStorage.getItem('colorTexto') || "#00ff00";
-    const tamano = localStorage.getItem('tamanoFuente') || "16";
-    const tipografia = localStorage.getItem('tipografia') || "'Courier New', monospace";
+        localStorage.setItem(
+          "estudio_fuente",
+          fuente
+        );
 
-    document.getElementById('colorTexto').value = color;
-    document.getElementById('tamanoFuente').value = tamano;
-    document.getElementById('tipografia').value = tipografia;
 
-    document.body.style.color = color;
-    document.body.style.fontSize = tamano + "px";
-    document.body.style.fontFamily = tipografia;
-  });
+        /* Mostrar mensaje */
 
-  const sidebar = document.querySelector('.sidebar');
-  const addTabBtn = document.querySelector('.add-tab');
+        saveStatus.classList.add("show");
 
-  function activateTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        setTimeout(() => {
+          saveStatus.classList.remove("show");
+        }, 2000);
+      }
 
-    tab.classList.add('active');
-    const target = document.getElementById(tab.dataset.tab);
-    target.classList.add('active');
-  }
 
-  // Activar pestañas existentes
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => activateTab(tab));
-  });
+      aplicarConfig.addEventListener(
+        "click",
+        aplicarConfiguracion
+      );
 
-  // Crear nuevas pestañas con área editable
-  addTabBtn.addEventListener('click', () => {
-    const nombre = prompt("Nombre de la nueva pestaña (ej: Matemáticas, Historia):");
-    if (!nombre) return;
 
-    const newTabId = `tab_${Date.now()}`;
+      /* =========================
+         CARGAR CONFIGURACIÓN
+      ========================== */
 
-    const newTab = document.createElement('div');
-    newTab.classList.add('tab');
-    newTab.dataset.tab = newTabId;
-    newTab.textContent = nombre;
-    sidebar.insertBefore(newTab, addTabBtn);
+      function cargarConfiguracion() {
 
-    const newContent = document.createElement('div');
-    newContent.id = newTabId;
-    newContent.classList.add('tab-content');
+        const color =
+          localStorage.getItem("estudio_color")
+          || "#00ff00";
 
-    // Área editable para apuntes
-    const textarea = document.createElement('textarea');
-    textarea.style.width = "100%";
-    textarea.style.height = "300px";
-    textarea.style.backgroundColor = "#000";
-    textarea.style.color = "#00ff00";
-    textarea.style.fontFamily = "'Courier New', monospace";
-    textarea.value = localStorage.getItem(newTabId) || ""; // Recuperar apuntes guardados
+        const tamano =
+          localStorage.getItem("estudio_tamano")
+          || "16";
 
-    // Guardar automáticamente al escribir
-    textarea.addEventListener('input', () => {
-      localStorage.setItem(newTabId, textarea.value);
-    });
+        const fuente =
+          localStorage.getItem("estudio_fuente")
+          || "'Courier New', monospace";
 
-    newContent.innerHTML = `<h1>${nombre}</h1>`;
-    newContent.appendChild(textarea);
-    document.querySelector('.content').appendChild(newContent);
 
-    newTab.addEventListener('click', () => activateTab(newTab));
-    activateTab(newTab);
-  });
+        colorTexto.value = color;
 
-  // Recuperar pestañas guardadas al cargar
-  window.addEventListener('load', () => {
-    for (let key in localStorage) {
-      if (key.startsWith("tab_")) {
-        const nombre = "Recuperado"; // puedes mejorar guardando también el nombre
-        const newTab = document.createElement('div');
-        newTab.classList.add('tab');
-        newTab.dataset.tab = key;
+        tamanoFuente.value = tamano;
+
+        tipografia.value = fuente;
+
+
+        document.body.style.color = color;
+
+        document.body.style.fontSize =
+          tamano + "px";
+
+        document.body.style.fontFamily =
+          fuente;
+      }
+
+
+      /* =========================
+         ACTIVAR PESTAÑA
+      ========================== */
+
+      function activateTab(tab) {
+
+        document
+          .querySelectorAll(".tab")
+          .forEach(t => {
+            t.classList.remove("active");
+          });
+
+
+        document
+          .querySelectorAll(".tab-content")
+          .forEach(c => {
+            c.classList.remove("active");
+          });
+
+
+        tab.classList.add("active");
+
+
+        const target =
+          document.getElementById(
+            tab.dataset.tab
+          );
+
+
+        if (target) {
+          target.classList.add("active");
+        }
+      }
+
+
+      /* =========================
+         CONFIGURAR PESTAÑAS
+      ========================== */
+
+      function configurarTab(tab) {
+
+        tab.addEventListener(
+          "click",
+          () => activateTab(tab)
+        );
+      }
+
+
+      document
+        .querySelectorAll(".tab")
+        .forEach(configurarTab);
+
+
+      /* =========================
+         CREAR NUEVA PESTAÑA
+      ========================== */
+
+      function crearPestana(
+        id,
+        nombre,
+        contenidoTexto = ""
+      ) {
+
+        /* Crear botón de pestaña */
+
+        const newTab =
+          document.createElement("div");
+
+        newTab.className = "tab";
+
+        newTab.dataset.tab = id;
+
         newTab.textContent = nombre;
-        sidebar.insertBefore(newTab, addTabBtn);
 
-        const newContent = document.createElement('div');
-        newContent.id = key;
-        newContent.classList.add('tab-content');
 
-        const textarea = document.createElement('textarea');
-        textarea.style.width = "100%";
-        textarea.style.height = "300px";
-        textarea.style.backgroundColor = "#000";
-        textarea.style.color = "#00ff00";
-        textarea.style.fontFamily = "'Courier New', monospace";
-        textarea.value = localStorage.getItem(key) || "";
+        sidebar.insertBefore(
+          newTab,
+          addTabBtn
+        );
 
-        textarea.addEventListener('input', () => {
-          localStorage.setItem(key, textarea.value);
-        });
 
-        newContent.innerHTML = `<h1>${nombre}</h1>`;
+        /* Crear contenido */
+
+        const newContent =
+          document.createElement("div");
+
+        newContent.id = id;
+
+        newContent.className =
+          "tab-content";
+
+
+        /* Título */
+
+        const titulo =
+          document.createElement("h1");
+
+        titulo.textContent = nombre;
+
+
+        /* Área de apuntes */
+
+        const textarea =
+          document.createElement("textarea");
+
+        textarea.className = "notes";
+
+        textarea.placeholder =
+          "Escribe tus apuntes aquí...";
+
+        textarea.value =
+          contenidoTexto;
+
+
+        /* Estado */
+
+        const status =
+          document.createElement("div");
+
+        status.className = "save-status";
+
+        status.textContent =
+          "✓ Apuntes guardados";
+
+
+        /* Botón eliminar */
+
+        const deleteBtn =
+          document.createElement("button");
+
+        deleteBtn.className =
+          "delete-btn";
+
+        deleteBtn.type = "button";
+
+        deleteBtn.textContent =
+          "Eliminar pestaña";
+
+
+        /* Guardar apuntes automáticamente */
+
+        textarea.addEventListener(
+          "input",
+          () => {
+
+            guardarPestana(
+              id,
+              nombre,
+              textarea.value
+            );
+
+
+            status.classList.add("show");
+
+            setTimeout(() => {
+              status.classList.remove("show");
+            }, 800);
+
+          }
+        );
+
+
+        /* Eliminar pestaña */
+
+        deleteBtn.addEventListener(
+          "click",
+          () => {
+
+            const confirmar =
+              confirm(
+                `¿Eliminar la pestaña "${nombre}"?`
+              );
+
+
+            if (!confirmar) {
+              return;
+            }
+
+
+            localStorage.removeItem(id);
+
+
+            newTab.remove();
+
+            newContent.remove();
+
+
+            /* Volver a Inicio */
+
+            const inicio =
+              document.querySelector(
+                '[data-tab="inicio"]'
+              );
+
+            if (inicio) {
+              activateTab(inicio);
+            }
+
+          }
+        );
+
+
+        /* Añadir elementos */
+
+        newContent.appendChild(titulo);
+
         newContent.appendChild(textarea);
-        document.querySelector('.content').appendChild(newContent);
 
-        newTab.addEventListener('click', () => activateTab(newTab));
-      }
-    }
-  });
+        newContent.appendChild(status);
 
-  const sidebar = document.querySelector('.sidebar');
-  const addTabBtn = document.querySelector('.add-tab');
-
-  function activateTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-    tab.classList.add('active');
-    const target = document.getElementById(tab.dataset.tab);
-    target.classList.add('active');
-  }
-
-  // Activar pestañas existentes
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => activateTab(tab));
-  });
-
-  // Crear nuevas pestañas con nombre y apuntes
-  addTabBtn.addEventListener('click', () => {
-    const nombre = prompt("Nombre de la nueva pestaña (ej: Matemáticas, Historia):");
-    if (!nombre) return;
-
-    const newTabId = `tab_${Date.now()}`;
-
-    const newTab = document.createElement('div');
-    newTab.classList.add('tab');
-    newTab.dataset.tab = newTabId;
-    newTab.textContent = nombre;
-    sidebar.insertBefore(newTab, addTabBtn);
-
-    const newContent = document.createElement('div');
-    newContent.id = newTabId;
-    newContent.classList.add('tab-content');
-
-    // Área editable para apuntes
-    const textarea = document.createElement('textarea');
-    textarea.style.width = "100%";
-    textarea.style.height = "300px";
-    textarea.style.backgroundColor = "#000";
-    textarea.style.color = "#00ff00";
-    textarea.style.fontFamily = "'Courier New', monospace";
-    textarea.value = "";
-
-    // Guardar automáticamente nombre y apuntes
-    textarea.addEventListener('input', () => {
-      localStorage.setItem(newTabId, JSON.stringify({
-        nombre: nombre,
-        contenido: textarea.value
-      }));
-    });
-
-    newContent.innerHTML = `<h1>${nombre}</h1>`;
-    newContent.appendChild(textarea);
-    document.querySelector('.content').appendChild(newContent);
-
-    newTab.addEventListener('click', () => activateTab(newTab));
-    activateTab(newTab);
-
-    // Guardar pestaña en localStorage
-    localStorage.setItem(newTabId, JSON.stringify({
-      nombre: nombre,
-      contenido: ""
-    }));
-  });
-
-  // Recuperar pestañas guardadas al cargar
-  window.addEventListener('load', () => {
-    for (let key in localStorage) {
-      if (key.startsWith("tab_")) {
-        const data = JSON.parse(localStorage.getItem(key));
-        if (!data) continue;
-
-        const newTab = document.createElement('div');
-        newTab.classList.add('tab');
-        newTab.dataset.tab = key;
-        newTab.textContent = data.nombre;
-        sidebar.insertBefore(newTab, addTabBtn);
-
-        const newContent = document.createElement('div');
-        newContent.id = key;
-        newContent.classList.add('tab-content');
-
-        const textarea = document.createElement('textarea');
-        textarea.style.width = "100%";
-        textarea.style.height = "300px";
-        textarea.style.backgroundColor = "#000";
-        textarea.style.color = "#00ff00";
-        textarea.style.fontFamily = "'Courier New', monospace";
-        textarea.value = data.contenido || "";
-
-        textarea.addEventListener('input', () => {
-          localStorage.setItem(key, JSON.stringify({
-            nombre: data.nombre,
-            contenido: textarea.value
-          }));
-        });
-
-        newContent.innerHTML = `<h1>${data.nombre}</h1>`;
-        newContent.appendChild(textarea);
-        document.querySelector('.content').appendChild(newContent);
-
-        newTab.addEventListener('click', () => activateTab(newTab));
-      }
-    }
-  });
-
-  const sidebar = document.querySelector('.sidebar');
-  const addTabBtn = document.querySelector('.add-tab');
-
-  function activateTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-    tab.classList.add('active');
-    const target = document.getElementById(tab.dataset.tab);
-    target.classList.add('active');
-  }
-
-  // Activar pestañas existentes
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => activateTab(tab));
-  });
-
-  // Crear nuevas pestañas con nombre, apuntes y botón eliminar
-  addTabBtn.addEventListener('click', () => {
-    const nombre = prompt("Nombre de la nueva pestaña (ej: Matemáticas, Historia):");
-    if (!nombre) return;
-
-    const newTabId = `tab_${Date.now()}`;
-
-    const newTab = document.createElement('div');
-    newTab.classList.add('tab');
-    newTab.dataset.tab = newTabId;
-    newTab.textContent = nombre;
-    sidebar.insertBefore(newTab, addTabBtn);
-
-    const newContent = document.createElement('div');
-    newContent.id = newTabId;
-    newContent.classList.add('tab-content');
-
-    // Área editable para apuntes
-    const textarea = document.createElement('textarea');
-    textarea.style.width = "100%";
-    textarea.style.height = "300px";
-    textarea.style.backgroundColor = "#000";
-    textarea.style.color = "#00ff00";
-    textarea.style.fontFamily = "'Courier New', monospace";
-    textarea.value = "";
-
-    textarea.addEventListener('input', () => {
-      localStorage.setItem(newTabId, JSON.stringify({
-        nombre: nombre,
-        contenido: textarea.value
-      }));
-    });
-
-    // Botón eliminar pestaña
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = "Eliminar pestaña";
-    deleteBtn.style.marginTop = "10px";
-    deleteBtn.style.backgroundColor = "#222";
-    deleteBtn.style.color = "#00ff00";
-    deleteBtn.style.border = "1px solid #00ff00";
-    deleteBtn.style.cursor = "pointer";
-
-    deleteBtn.addEventListener('click', () => {
-      // Eliminar pestaña y contenido
-      newTab.remove();
-      newContent.remove();
-      localStorage.removeItem(newTabId);
-    });
-
-    newContent.innerHTML = `<h1>${nombre}</h1>`;
-    newContent.appendChild(textarea);
-    newContent.appendChild(deleteBtn);
-    document.querySelector('.content').appendChild(newContent);
-
-    newTab.addEventListener('click', () => activateTab(newTab));
-    activateTab(newTab);
-
-    // Guardar pestaña en localStorage
-    localStorage.setItem(newTabId, JSON.stringify({
-      nombre: nombre,
-      contenido: ""
-    }));
-  });
-
-  // Recuperar pestañas guardadas al cargar
-  window.addEventListener('load', () => {
-    for (let key in localStorage) {
-      if (key.startsWith("tab_")) {
-        const data = JSON.parse(localStorage.getItem(key));
-        if (!data) continue;
-
-        const newTab = document.createElement('div');
-        newTab.classList.add('tab');
-        newTab.dataset.tab = key;
-        newTab.textContent = data.nombre;
-        sidebar.insertBefore(newTab, addTabBtn);
-
-        const newContent = document.createElement('div');
-        newContent.id = key;
-        newContent.classList.add('tab-content');
-
-        const textarea = document.createElement('textarea');
-        textarea.style.width = "100%";
-        textarea.style.height = "300px";
-        textarea.style.backgroundColor = "#000";
-        textarea.style.color = "#00ff00";
-        textarea.style.fontFamily = "'Courier New', monospace";
-        textarea.value = data.contenido || "";
-
-        textarea.addEventListener('input', () => {
-          localStorage.setItem(key, JSON.stringify({
-            nombre: data.nombre,
-            contenido: textarea.value
-          }));
-        });
-
-        // Botón eliminar pestaña
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = "Eliminar pestaña";
-        deleteBtn.style.marginTop = "10px";
-        deleteBtn.style.backgroundColor = "#222";
-        deleteBtn.style.color = "#00ff00";
-        deleteBtn.style.border = "1px solid #00ff00";
-        deleteBtn.style.cursor = "pointer";
-
-        deleteBtn.addEventListener('click', () => {
-          newTab.remove();
-          newContent.remove();
-          localStorage.removeItem(key);
-        });
-
-        newContent.innerHTML = `<h1>${data.nombre}</h1>`;
-        newContent.appendChild(textarea);
         newContent.appendChild(deleteBtn);
-        document.querySelector('.content').appendChild(newContent);
 
-        newTab.addEventListener('click', () => activateTab(newTab));
+
+        content.appendChild(newContent);
+
+
+        configurarTab(newTab);
+
+
+        return newTab;
       }
-    }
-  });
-</script>
 
 
+      /* =========================
+         GUARDAR PESTAÑA
+      ========================== */
 
+      function guardarPestana(
+        id,
+        nombre,
+        contenido
+      ) {
+
+        const datos = {
+          nombre: nombre,
+          contenido: contenido
+        };
+
+
+        localStorage.setItem(
+          id,
+          JSON.stringify(datos)
+        );
+      }
+
+
+      /* =========================
+         NUEVA PESTAÑA
+      ========================== */
+
+      addTabBtn.addEventListener(
+        "click",
+        () => {
+
+          const nombre =
+            prompt(
+              "Nombre de la nueva pestaña:"
+            );
+
+
+          if (!nombre) {
+            return;
+          }
+
+
+          const nombreLimpio =
+            nombre.trim();
+
+
+          if (!nombreLimpio) {
+            return;
+          }
+
+
+          const id =
+            "tab_" +
+            Date.now();
+
+
+          crearPestana(
+            id,
+            nombreLimpio,
+            ""
+          );
+
+
+          guardarPestana(
+            id,
+            nombreLimpio,
+            ""
+          );
+
+
+          const tab =
+            document.querySelector(
+              `[data-tab="${id}"]`
+            );
+
+
+          if (tab) {
+            activateTab(tab);
+          }
+
+        }
+      );
+
+
+      /* =========================
+         RECUPERAR PESTAÑAS
+      ========================== */
+
+      function cargarPestanas() {
+
+        for (
+          let i = 0;
+          i < localStorage.length;
+          i++
+        ) {
+
+          const key =
+            localStorage.key(i);
+
+
+          if (
+            !key ||
+            !key.startsWith("tab_")
+          ) {
+            continue;
+          }
+
+
+          try {
+
+            const datos =
+              JSON.parse(
+                localStorage.getItem(key)
+              );
+
+
+            if (
+              !datos ||
+              !datos.nombre
+            ) {
+              continue;
+            }
+
+
+            crearPestana(
+              key,
+              datos.nombre,
+              datos.contenido || ""
+            );
+
+
+          } catch (error) {
+
+            console.warn(
+              "No se pudo recuperar la pestaña:",
+              key
+            );
+
+          }
+
+        }
+
+      }
+
+
+      /* =========================
+         INICIALIZAR
+      ========================== */
+
+      cargarConfiguracion();
+
+      cargarPestanas();
+
+    });
+
+  </script>
 
 </body>
 </html>
